@@ -6,6 +6,8 @@ public class carManager : MonoBehaviour {
 
 	public static List<carController> cars = new List<carController>();
 	public static Vector3 averagePos;
+	public static float carWidth = 2;
+	public static float stuckTimer = 2;
 	public GameObject circle;
 
 	// Use this for initialization
@@ -30,7 +32,7 @@ public class carManager : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 		FindAveragePosition();
-		circle.transform.position = averagePos;
+		//circle.transform.position = averagePos;
 		
 	}
 

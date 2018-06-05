@@ -12,17 +12,20 @@ public class AxleInfo {
     public bool steering;
 }
      
-public class carController : carManager {
+public class carController : MonoBehaviour {
 	public int playerID = 1;
     public List<AxleInfo> axleInfos; 
     public float maxMotorTorque;
     public float maxSteeringAngle;
-     
+    public GameObject lastCheckpoint;
+    private Rigidbody rigidbody;
+    private float knockoutTimer;
 
 
 	 void Start(){
-            carManager.cars.Add(this);
-            foreach (AxleInfo axleInfo in axleInfos) {
+         rigidbody = GetComponent<Rigidbody>();
+        carManager.cars.Add(this);
+        foreach (AxleInfo axleInfo in axleInfos) {
             axleInfo.leftWheel.ConfigureVehicleSubsteps(8,20,20);
             axleInfo.rightWheel.ConfigureVehicleSubsteps(8,20,20);
 
@@ -68,5 +71,30 @@ public class carController : carManager {
             ApplyLocalPositionToVisuals(axleInfo.leftWheel);
             ApplyLocalPositionToVisuals(axleInfo.rightWheel);
         }
+        //check if car is stuck
+        if (motor == maxMotorTorque && Vector3.Magnitude(rigidbody.velocity)<.1f){
+            knockoutTimer+= Time.deltaTime;
+            if (knockoutTimer > carManager.stuckTimer) Reset();
+        }else{
+            knockoutTimer=0;
+        }
+        
+    }
+
+    void OnTriggerEnter(Collider other){
+        if (other.tag == "destroy"){
+            Reset();
+        }
+            
+    }
+
+    public void Reset(){
+        rigidbody.velocity = Vector3.zero;
+            rigidbody.angularVelocity = Vector3.zero;
+
+            Transform t = lastCheckpoint.transform;
+            int c = carManager.cars.Count-1;
+            transform.position = t.position - t.right * carManager.carWidth * (c/2 + playerID-1) + 5* Vector3.up;
+            transform.rotation = t.rotation;
     }
 }
