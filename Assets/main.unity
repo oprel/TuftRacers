@@ -154,7 +154,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
       propertyPath: m_Name
-      value: Checkpoint 10
+      value: Checkpoint 295
       objectReference: {fileID: 0}
     - target: {fileID: 135900849632845768, guid: 05697b0285da0c74f889d9182a338fce,
         type: 2}
@@ -299,7 +299,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
       propertyPath: m_Name
-      value: Checkpoint 15
+      value: Checkpoint 300
       objectReference: {fileID: 0}
     - target: {fileID: 135900849632845768, guid: 05697b0285da0c74f889d9182a338fce,
         type: 2}
@@ -325,7 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2defdd1e449d0504ba73ee866bb19aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 11
+  id: 296
 --- !u!1001 &489364427
 Prefab:
   m_ObjectHideFlags: 0
@@ -367,7 +367,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
       propertyPath: m_Name
-      value: Checkpoint 9
+      value: Checkpoint 294
       objectReference: {fileID: 0}
     - target: {fileID: 135900849632845768, guid: 05697b0285da0c74f889d9182a338fce,
         type: 2}
@@ -418,7 +418,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
       propertyPath: m_Name
-      value: Checkpoint 8
+      value: Checkpoint 293
       objectReference: {fileID: 0}
     - target: {fileID: 135900849632845768, guid: 05697b0285da0c74f889d9182a338fce,
         type: 2}
@@ -444,7 +444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2defdd1e449d0504ba73ee866bb19aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 10
+  id: 295
 --- !u!1 &553327729 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce,
@@ -461,7 +461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2defdd1e449d0504ba73ee866bb19aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 7
+  id: 292
 --- !u!1 &561558652 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce,
@@ -478,7 +478,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2defdd1e449d0504ba73ee866bb19aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 12
+  id: 297
 --- !u!1 &583103307
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,7 +490,7 @@ GameObject:
   - component: {fileID: 583103308}
   - component: {fileID: 583103311}
   m_Layer: 0
-  m_Name: carManager
+  m_Name: Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -519,7 +519,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 21
+  m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &583103311
 MonoBehaviour:
@@ -532,6 +532,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 149d5746132b60a4cb15e0f80357fb2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hexPrefab: {fileID: 1796406676553144, guid: aec3f0f5ca09c9e428ae39efc19d36f1, type: 2}
+  gap: 0
 --- !u!1001 &629446795
 Prefab:
   m_ObjectHideFlags: 0
@@ -604,7 +606,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2defdd1e449d0504ba73ee866bb19aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 6
+  id: 291
 --- !u!1 &739807152 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce,
@@ -621,7 +623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2defdd1e449d0504ba73ee866bb19aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 8
+  id: 293
 --- !u!1 &748672223
 GameObject:
   m_ObjectHideFlags: 0
@@ -706,7 +708,7 @@ Transform:
   m_LocalScale: {x: 101.77103, y: 101.77101, z: 101.77101}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
 --- !u!1001 &764778733
 Prefab:
@@ -749,7 +751,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
       propertyPath: m_Name
-      value: Checkpoint 6
+      value: Checkpoint 291
       objectReference: {fileID: 0}
     - target: {fileID: 135900849632845768, guid: 05697b0285da0c74f889d9182a338fce,
         type: 2}
@@ -800,7 +802,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
       propertyPath: m_Name
-      value: Checkpoint 11
+      value: Checkpoint 296
       objectReference: {fileID: 0}
     - target: {fileID: 135900849632845768, guid: 05697b0285da0c74f889d9182a338fce,
         type: 2}
@@ -851,7 +853,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
       propertyPath: m_Name
-      value: Checkpoint 1
+      value: Checkpoint 286
       objectReference: {fileID: 0}
     - target: {fileID: 135900849632845768, guid: 05697b0285da0c74f889d9182a338fce,
         type: 2}
@@ -907,7 +909,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
       propertyPath: m_Name
-      value: Checkpoint 14
+      value: Checkpoint 299
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
@@ -928,7 +930,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2defdd1e449d0504ba73ee866bb19aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 14
+  id: 299
 --- !u!1 &1071110261 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce,
@@ -945,7 +947,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2defdd1e449d0504ba73ee866bb19aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 4
+  id: 289
 --- !u!1 &1137885289 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce,
@@ -962,7 +964,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2defdd1e449d0504ba73ee866bb19aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 13
+  id: 298
 --- !u!1 &1194808170 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce,
@@ -979,7 +981,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2defdd1e449d0504ba73ee866bb19aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 3
+  id: 288
 --- !u!1 &1210517916 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce,
@@ -996,7 +998,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2defdd1e449d0504ba73ee866bb19aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 9
+  id: 294
 --- !u!1001 &1291078028
 Prefab:
   m_ObjectHideFlags: 0
@@ -1038,7 +1040,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
       propertyPath: m_Name
-      value: Checkpoint 4
+      value: Checkpoint 289
       objectReference: {fileID: 0}
     - target: {fileID: 135900849632845768, guid: 05697b0285da0c74f889d9182a338fce,
         type: 2}
@@ -1089,7 +1091,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
       propertyPath: m_Name
-      value: Checkpoint 12
+      value: Checkpoint 297
       objectReference: {fileID: 0}
     - target: {fileID: 135900849632845768, guid: 05697b0285da0c74f889d9182a338fce,
         type: 2}
@@ -1115,7 +1117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2defdd1e449d0504ba73ee866bb19aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 5
+  id: 290
 --- !u!1001 &1537857299
 Prefab:
   m_ObjectHideFlags: 0
@@ -1157,7 +1159,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
       propertyPath: m_Name
-      value: Checkpoint 13
+      value: Checkpoint 298
       objectReference: {fileID: 0}
     - target: {fileID: 135900849632845768, guid: 05697b0285da0c74f889d9182a338fce,
         type: 2}
@@ -1208,7 +1210,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
       propertyPath: m_Name
-      value: Checkpoint 7
+      value: Checkpoint 292
       objectReference: {fileID: 0}
     - target: {fileID: 135900849632845768, guid: 05697b0285da0c74f889d9182a338fce,
         type: 2}
@@ -1299,7 +1301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2defdd1e449d0504ba73ee866bb19aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 15
+  id: 300
 --- !u!1 &1630727159
 GameObject:
   m_ObjectHideFlags: 0
@@ -1429,7 +1431,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
       propertyPath: m_Name
-      value: Checkpoint 5
+      value: Checkpoint 290
       objectReference: {fileID: 0}
     - target: {fileID: 135900849632845768, guid: 05697b0285da0c74f889d9182a338fce,
         type: 2}
@@ -1455,7 +1457,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2defdd1e449d0504ba73ee866bb19aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2
+  id: 287
+--- !u!1001 &1783228980
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4029871363194102, guid: aec3f0f5ca09c9e428ae39efc19d36f1, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4029871363194102, guid: aec3f0f5ca09c9e428ae39efc19d36f1, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4029871363194102, guid: aec3f0f5ca09c9e428ae39efc19d36f1, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4029871363194102, guid: aec3f0f5ca09c9e428ae39efc19d36f1, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4029871363194102, guid: aec3f0f5ca09c9e428ae39efc19d36f1, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4029871363194102, guid: aec3f0f5ca09c9e428ae39efc19d36f1, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4029871363194102, guid: aec3f0f5ca09c9e428ae39efc19d36f1, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4029871363194102, guid: aec3f0f5ca09c9e428ae39efc19d36f1, type: 2}
+      propertyPath: m_RootOrder
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1796406676553144, guid: aec3f0f5ca09c9e428ae39efc19d36f1, type: 2}
+      propertyPath: m_Name
+      value: hex
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: aec3f0f5ca09c9e428ae39efc19d36f1, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1806997450 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce,
@@ -1472,7 +1520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2defdd1e449d0504ba73ee866bb19aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1
+  id: 286
 --- !u!1001 &1888524813
 Prefab:
   m_ObjectHideFlags: 0
@@ -1514,7 +1562,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
       propertyPath: m_Name
-      value: Checkpoint 2
+      value: Checkpoint 287
       objectReference: {fileID: 0}
     - target: {fileID: 135900849632845768, guid: 05697b0285da0c74f889d9182a338fce,
         type: 2}
@@ -1565,7 +1613,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1506788037355110, guid: 05697b0285da0c74f889d9182a338fce, type: 2}
       propertyPath: m_Name
-      value: Checkpoint 3
+      value: Checkpoint 288
       objectReference: {fileID: 0}
     - target: {fileID: 135900849632845768, guid: 05697b0285da0c74f889d9182a338fce,
         type: 2}
