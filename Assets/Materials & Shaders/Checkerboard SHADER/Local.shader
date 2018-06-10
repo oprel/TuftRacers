@@ -32,48 +32,32 @@
 		half _Metallic;
 		int _Subdivisions;
 		uniform float4 _Color;
-      uniform float _LineWidth;
-      uniform float _Density;
-      uniform float _Offset;
+		uniform float _LineWidth;
+		uniform float _Density;
+		uniform float _Offset;
 
-		// Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
-		// See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
-		// #pragma instancing_options assumeuniformscaling
 		UNITY_INSTANCING_BUFFER_START(Props)
-			// put more per-instance properties here
 		UNITY_INSTANCING_BUFFER_END(Props)
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {
-			// Albedo comes from a texture tinted by color
-		float4 answer;
+
+			fixed4 col = _Color;
+			col = _Offset * (col - .5f) + 0.5f;
+
+			float2 c = floor(IN.uv_MainTex2 * _Density)/2;
+	    	float checker = frac(c.x + c.y) * 2;
+			col = lerp(_Color, col, step(0.0,0.5-checker));
+
+			//line
 			float lx = step(_LineWidth, IN.uv_MainTex2.x);
 	        float ly = step(_LineWidth, IN.uv_MainTex2.y);
 	        float hx = step(IN.uv_MainTex2.x, 1.0 - _LineWidth);
 	        float hy = step(IN.uv_MainTex2.y, 1.0 - _LineWidth);
+			col = lerp(_Color, col, lx*ly*hx*hy);
 
-
-        float2 c = IN.uv_MainTex2 * _Density;
-        c = floor(c) / 2;
-
-        //float size = max(c.w,c.h);
-	    float checker = frac(c.x + c.y) * 2;
-
-        fixed4 col = _Color;
-
-        if (checker<0.5f){
-			col -= 0.5f;
- 			col*=_Offset;
- 			col+=0.5f;
-
-		}
-
-        answer = lerp(_Color, col, lx*ly*hx*hy);
-
-
-
-
-			//o.uv = o.uv * _Subdivisions;
-			o.Albedo = answer;
+		
+			
+			o.Albedo = col;
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;

@@ -33,6 +33,7 @@ public class carManager : MonoBehaviour {
 	void FixedUpdate () {
 		FindAveragePosition();
 		//circle.transform.position = averagePos;
+		Shader.SetGlobalVector("_DissolvePosition", averagePos);
 		
 	}
 

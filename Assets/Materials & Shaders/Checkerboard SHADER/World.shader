@@ -46,41 +46,18 @@
 		UNITY_INSTANCING_BUFFER_END(Props)
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {
-			// Albedo comes from a texture tinted by color
-		float4 answer;
+			fixed4 col = _Color;
+			col = _Offset * (col - .5f) + 0.5f;
+			float3 c = floor(IN.worldPos * _Density);
+			float checker = frac(c.x/2 + c.y/2 + c.z/2) * 2;
+			col = lerp(_Color, col, step(0.0,0.5-checker));
 			float lx = step(_LineWidth, IN.uv_MainTex2.x);
 	        float ly = step(_LineWidth, IN.uv_MainTex2.y);
 	        float hx = step(IN.uv_MainTex2.x, 1.0 - _LineWidth);
 	        float hy = step(IN.uv_MainTex2.y, 1.0 - _LineWidth);
-
-	        //lx = step(_LineWidth, IN.worldPos.x);
-	        //ly = step(_LineWidth, IN.worldPos.y);
-	        //hx = step(IN.worldPos.x, 1.0 - _LineWidth);
-	        //hy = step(IN.worldPos.y, 1.0 - _LineWidth);
-
-
-        float3 c = IN.worldPos * _Density;
-        c = floor(c);
-
-        //float size = max(c.w,c.h);
-	    float checker = frac(c.x/2 + c.y/2 + c.z/2) * 2;
-
-        fixed4 col = _Color;
-
-        if (checker<0.5f){
-			col -= 0.5f;
- 			col*=_Offset;
- 			col+=0.5f;
-
-		}
-
-        answer = lerp(_Color, col, lx*ly*hx*hy);
-
-
-
-
-			//o.uv = o.uv * _Subdivisions;
-			o.Albedo = answer;
+			col = lerp(_Color, col, lx*ly*hx*hy);
+			
+			o.Albedo = col;
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
