@@ -6,9 +6,9 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Reveal
+  m_Name: Reveal 1
   m_Shader: {fileID: 4800000, guid: 0913bc03aac35b74daf1a7d071b1e35b, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: _LOCALWORLD_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -69,7 +69,7 @@ Material:
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
-    - _Density: 20.18
+    - _Density: 5
     - _DetailNormalMapScale: 1
     - _DisAmount: 0.01
     - _DisLineWidth: 0.042
@@ -78,21 +78,21 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _LineWidth: 0.061
-    - _LocalWorld: 0
+    - _LocalWorld: 1
     - _Metallic: 0
     - _Mode: 0
     - _NScale: 0.01
     - _OcclusionStrength: 1
-    - _Offset: 0.54
+    - _Offset: 0.872
     - _Parallax: 0.02
-    - _Radius: 79
+    - _Radius: 50
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.3916955, g: 0.38884082, b: 0.42647058, a: 1}
-    - _Color2: {r: 0.8602941, g: 0.26567906, b: 0.26567906, a: 1}
+    - _Color: {r: 0.1102941, g: 0.1102941, b: 0.1102941, a: 1}
+    - _Color2: {r: 0, g: 0, b: 0, a: 1}
     - _DisLineColor: {r: 0, g: 0.27205884, b: 0.114452325, a: 0.459}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

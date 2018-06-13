@@ -10,6 +10,13 @@ public class carManager : MonoBehaviour {
 	public static float stuckTimer = 2;
 	public GameObject circle;
 
+	private trackManager trackManager;
+
+	void Start(){
+		trackManager = GetComponent<trackManager>();
+		hasCheckpoint();
+		
+	}
 	// Use this for initialization
 	private void FindAveragePosition()
 		{
@@ -32,6 +39,7 @@ public class carManager : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 		FindAveragePosition();
+		hasCheckpoint();
 		//circle.transform.position = averagePos;
 		Shader.SetGlobalVector("_DissolvePosition", averagePos);
 		
@@ -42,6 +50,13 @@ public class carManager : MonoBehaviour {
         Gizmos.DrawWireSphere(averagePos, 2f);
     }
 
+	void hasCheckpoint(){
+		foreach (carController car in cars){
+			if (car.lastCheckpoint) continue;
+			car.lastCheckpoint = trackManager.checkpoints[0];
+			car.Reset();
+		}
+	}
 	
 
 }

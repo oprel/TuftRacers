@@ -8,7 +8,7 @@ public class trackManager : MonoBehaviour {
 
 	public static List<GameObject> checkpoints = new List<GameObject>();
 
-	static int gridSize = 5;
+	static int gridSize = 15;
 	public static Vector3[,] grid = new Vector3[gridSize,gridSize];
 	public static GameObject[,] placedTiles = new GameObject[gridSize,gridSize];
 	public static List<GameObject> tileHistory = new List<GameObject>();
@@ -62,10 +62,14 @@ public class trackManager : MonoBehaviour {
 		//Debug.Log( cursor.x + " : " + cursor.y + " is already placed: " +!checkPath(direction+obj.GetComponent<trackTile>().directionDelta));
 		GameObject o = Instantiate(obj,grid[cursor.x,cursor.y],Quaternion.Euler(0,120+direction*60,0), transform);
 		placedTiles[cursor.x,cursor.y] = o;
-		o.name = "track " + cursor.x + ":" +cursor.y + " D:" + direction;
+		o.name = "track " + cursor.x + ":" +cursor.y + " D:" + direction + " (" + obj.name +")";
 		trackTile tile = o.GetComponent<trackTile>();
 		direction = mod(direction+tile.directionDelta,6);
 		tile.coordinates = cursor;
+		checkpoint[] c = o.GetComponentsInChildren<checkpoint>();
+		foreach (checkpoint p in c){
+			checkpoints.Add(p.gameObject);
+		}
 	
 	}
 
@@ -74,9 +78,9 @@ public class trackManager : MonoBehaviour {
 		foreach (GameObject c in checkpoints){
 			Destroy(c);
 		}
+		checkpoints.Clear();
 		//tileObjs = Resources.LoadAll("Tiles") as GameObject[];
 		tileObjs = new List<GameObject>(Resources.LoadAll<GameObject>("Tiles"));
-		Instantiate(tileObjs[0]);
 		CreateGrid();
 		
 	/* 

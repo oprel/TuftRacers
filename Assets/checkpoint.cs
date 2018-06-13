@@ -15,7 +15,6 @@ public class checkpoint : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other){
-		Debug.Log("hit");
 		if (other.tag=="Player"){
 			other.GetComponent<carController>().lastCheckpoint=gameObject;
 		}
