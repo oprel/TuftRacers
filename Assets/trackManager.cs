@@ -5,14 +5,13 @@ using UnityEngine;
 //[ExecuteInEditMode]
 public class trackManager : MonoBehaviour {
 
-
+	public static trackManager self;
 	public static List<GameObject> checkpoints = new List<GameObject>();
 
-	static int gridSize = 15;
+	static int gridSize = 50;
 	public static Vector3[,] grid = new Vector3[gridSize,gridSize];
 	public static GameObject[,] placedTiles = new GameObject[gridSize,gridSize];
 	public static List<GameObject> tileHistory = new List<GameObject>();
-
 	private List<tile> checkedTiles = new List<tile>();
 
 	private int updateTimer;
@@ -20,15 +19,18 @@ public class trackManager : MonoBehaviour {
 
 	public GameObject hexPrefab;
 	//private GameObject[] tileObjs;
-	private List<GameObject> tileObjs;
+	private List<List<GameObject>> tileObjs = new List<List<GameObject>>();
 
 	private tile cursor = new tile(gridSize/2,gridSize/2);
 	private int direction;
  
-	
+	public Material testMaterial;
+
 	public static float hexScale = 50;
     private Vector2 hexSize = new Vector2(hexScale,hexScale*Mathf.Sqrt(3)/2);
     public float gap = 0.0f;
+
+	private int update;
 
 	public struct tile{
 		public int x;
@@ -40,47 +42,20 @@ public class trackManager : MonoBehaviour {
 		}
 	}
 
-	void CreateGrid(){
-		for (int i = 0; i<gridSize; i++){
-			for (int j = 0; j<gridSize; j++){
-				grid[i,j] = new Vector3(i*hexSize.x,0,j*hexSize.y);
-				if (j%2>0) grid[i,j].x += hexSize.x/2;
-			}
-		}
-	}
-	
-	void CreateTile(){
-		MoveCursor(direction);
-		GameObject obj;
-		int i =0;
-		do{ obj = tileObjs[Random.Range(0,tileObjs.Count-1)];
-		i++;
-		if (i>100){
-			Debug.Log("Endless Loop"); break;
-		}
-		}while (!checkPath(mod(direction+obj.GetComponent<trackTile>().directionDelta,6)));
-		//Debug.Log( cursor.x + " : " + cursor.y + " is already placed: " +!checkPath(direction+obj.GetComponent<trackTile>().directionDelta));
-		GameObject o = Instantiate(obj,grid[cursor.x,cursor.y],Quaternion.Euler(0,120+direction*60,0), transform);
-		placedTiles[cursor.x,cursor.y] = o;
-		o.name = "track " + cursor.x + ":" +cursor.y + " D:" + direction + " (" + obj.name +")";
-		trackTile tile = o.GetComponent<trackTile>();
-		direction = mod(direction+tile.directionDelta,6);
-		tile.coordinates = cursor;
-		checkpoint[] c = o.GetComponentsInChildren<checkpoint>();
-		foreach (checkpoint p in c){
-			checkpoints.Add(p.gameObject);
-		}
-	
-	}
-
-    void Start()
+	void Start()
     {
+		self = this;
 		foreach (GameObject c in checkpoints){
 			Destroy(c);
 		}
 		checkpoints.Clear();
 		//tileObjs = Resources.LoadAll("Tiles") as GameObject[];
-		tileObjs = new List<GameObject>(Resources.LoadAll<GameObject>("Tiles"));
+		for (int i =0; i<5;i++){tileObjs.Add(new List<GameObject>());};
+		foreach (GameObject obj in new List<GameObject>(Resources.LoadAll<GameObject>("Tiles"))){
+			int i= obj.GetComponent<trackTile>().directionDelta+2;
+			tileObjs[i].Add(obj);
+		};
+		
 		CreateGrid();
 		
 	/* 
@@ -90,16 +65,108 @@ public class trackManager : MonoBehaviour {
 			}
 		}
 		*/
-		for (int i = 0; i<30; i++){
-			CreateTile();
+		for (int i = 0; i<5; i++){
+			AutoTile();
 		}
 		
 	
     }
 
-	// Update is called once per frame
-	void Update () {
+	void FixedUpdate(){
+		update++;
+		if (update>10){
+			newTile(Random.Range(-2,3));
+			if (tileHistory.Count>200) Clear();
+			Debug.ClearDeveloperConsole();
+			update=0;
+		}
+		
+	}
 
+
+	void CreateGrid(){
+		for (int i = 0; i<gridSize; i++){
+			for (int j = 0; j<gridSize; j++){
+				grid[i,j] = new Vector3(i*hexSize.x,0,j*hexSize.y);
+				if (j%2>0) grid[i,j].x += hexSize.x/2;
+			}
+		}
+	}
+	
+	void AutoTile(){
+		GameObject obj;
+		int i =0;
+		int d = 0;
+		do{ 
+			obj = GetRandomTile(Random.Range(-2,3));
+			d = obj.GetComponent<trackTile>().directionDelta;
+			i++;
+			if (i>1000){
+				Debug.Log("Endless Loop, deleting tile");
+				tile current = cursor;
+				MoveCursor(d);
+				Destroy(placedTiles[cursor.x,cursor.y]);
+				cursor = current;
+				break;
+			}
+		}while (!validPath(d));
+		CreateTile(obj);
+		tileHistory[tileHistory.Count-1].GetComponent<Renderer>().material = testMaterial;
+	}
+
+	public void newTile(int d){
+		
+		if (!validPath(d)){
+			int j=0;
+			do{
+				tile current = cursor;
+				AutoTile();
+				if (cursor.x==current.x && cursor.y == current.y){
+				Debug.Break();
+				return;
+			}
+			}while(!validPath(d));
+		}
+		CreateTile(GetRandomTile(d));
+		
+	}
+	void CreateTile(GameObject obj){
+		
+		GameObject o = Instantiate(obj,grid[cursor.x,cursor.y],Quaternion.Euler(0,120+direction*60,0), transform);
+		placedTiles[cursor.x,cursor.y] = o;
+		tileHistory.Add(o);
+		o.name = "track " + cursor.x + ":" +cursor.y + " D:" + direction + " (" + obj.name +")";
+		trackTile tile = o.GetComponent<trackTile>();
+		direction = mod(direction+tile.directionDelta,6);
+		tile.coordinates = cursor;
+		checkpoint[] c = o.GetComponentsInChildren<checkpoint>();
+		foreach (checkpoint p in c){
+			checkpoints.Add(p.gameObject);
+		}
+		
+		MoveCursor(direction);
+
+	}
+
+	void Clear(){
+		foreach (GameObject o in tileHistory){
+			Destroy(o);
+		}
+		grid = new Vector3[gridSize,gridSize];
+		placedTiles = new GameObject[gridSize,gridSize];
+		cursor = new tile(gridSize/2,gridSize/2);
+		tileHistory.Clear();
+		checkpoints.Clear();
+		Start();
+	}
+
+	GameObject GetRandomTile(int d){
+		d+=2;
+		return tileObjs[d][Random.Range(0,tileObjs[d].Count)];
+	}
+
+    
+	void oldUpdate () {
 		foreach( GameObject checkpoint in checkpoints){
 			if (!checkpoint) checkpoints.Remove(checkpoint);
 		}
@@ -111,7 +178,6 @@ public class trackManager : MonoBehaviour {
 				checkpoint.GetComponent<checkpoint>().id = checkpointCounter;
 				checkpoint.name = "Checkpoint " + checkpointCounter;
 			}
-				;
 		}
 	}
 
@@ -142,18 +208,20 @@ public class trackManager : MonoBehaviour {
 		}
 	}
 
-	bool checkPath(int d){
+	bool validPath(int d){
+		d=mod(direction+d,6);
 		checkedTiles.Clear();
+		checkedTiles.Add(cursor);
 		tile current = cursor;
 		MoveCursor(d);
-		bool check = depthSearch(6);
+		bool check = depthSearch(8);
 		cursor = current;
 		return check;
 	}
 
 	bool depthSearch(int depth){
-		checkedTiles.Add(cursor);
 		if (outOfBounds()) return false;
+		checkedTiles.Add(cursor);
 		if (placedTiles[cursor.x,cursor.y] != null) return false;
 		if (depth>0){
 			tile current = cursor;
@@ -164,6 +232,7 @@ public class trackManager : MonoBehaviour {
 				bool b = depthSearch(depth-1);
 				if (b) return b;
 			}
+			return false;
 		}
 		return true;
 	}
@@ -180,8 +249,17 @@ public class trackManager : MonoBehaviour {
 				Gizmos.DrawWireSphere(grid[i,j],1);
 			}
 		}
+
+		Gizmos.color=Color.red;
+		foreach (tile t in checkedTiles){
+			Gizmos.DrawWireSphere(grid[t.x,t.y],2);
+		}
+				Gizmos.color=Color.green;
+		Gizmos.DrawWireSphere(grid[cursor.x,cursor.y],3);
+
         if (checkpoints.Count>2) {
 			for (int i = 0; i<checkpoints.Count-1;i++){
+				if (!checkpoints[i]) continue;
 				Vector3 current = checkpoints[i].transform.position;
 				Vector3 next = checkpoints[i+1].transform.position;
 				Gizmos.color = Color.blue;

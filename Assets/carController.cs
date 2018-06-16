@@ -18,8 +18,10 @@ public class carController : MonoBehaviour {
     public float maxMotorTorque;
     public float maxSteeringAngle;
     public GameObject lastCheckpoint;
+    public GameObject pickup;
     private Rigidbody rigidbody;
     private float knockoutTimer;
+    private carAI carAI;
 
 
 	 void Start(){
@@ -30,7 +32,7 @@ public class carController : MonoBehaviour {
             axleInfo.rightWheel.ConfigureVehicleSubsteps(8,20,20);
 
 		 }
-
+        carAI = GetComponent<carAI>();
 	 }
     // finds the corresponding visual wheel
     // correctly applies the transform
@@ -53,10 +55,27 @@ public class carController : MonoBehaviour {
     public void FixedUpdate()
     {
         Debug.DrawLine(transform.position,carManager.averagePos);
-        float motor = maxMotorTorque * Input.GetAxis("Vertical " + playerID);
-        float steering = maxSteeringAngle * Input.GetAxis("Horizontal " + playerID);
-     
-        foreach (AxleInfo axleInfo in axleInfos) {
+        if (!carAI){
+            float motor = maxMotorTorque * Input.GetAxis("Vertical " + playerID);
+            float steering = maxSteeringAngle * Input.GetAxis("Horizontal " + playerID);
+            applyWheels(motor,steering);
+       
+        }
+        if (Random.value>.99f){
+            //GameObject o = Instantiate(pickup,transform.position,Quaternion.identity);
+            //o.GetComponent<tilePickup>().sourcePlayer = gameObject;
+        }
+    }
+
+    void OnTriggerEnter(Collider other){
+        if (other.tag == "destroy"){
+            Reset();
+        }
+            
+    }
+
+    public void applyWheels(float motor, float steering){
+         foreach (AxleInfo axleInfo in axleInfos) {
             if (axleInfo.steering) {
                 axleInfo.leftWheel.steerAngle = steering;
                 axleInfo.rightWheel.steerAngle = steering;
@@ -71,21 +90,14 @@ public class carController : MonoBehaviour {
             ApplyLocalPositionToVisuals(axleInfo.leftWheel);
             ApplyLocalPositionToVisuals(axleInfo.rightWheel);
         }
-        //check if car is stuck
+
+         //check if car is stuck
         if (motor == maxMotorTorque && Vector3.Magnitude(rigidbody.velocity)<.1f){
             knockoutTimer+= Time.deltaTime;
             if (knockoutTimer > carManager.stuckTimer) Reset();
         }else{
             knockoutTimer=0;
         }
-        
-    }
-
-    void OnTriggerEnter(Collider other){
-        if (other.tag == "destroy"){
-            Reset();
-        }
-            
     }
 
     public void Reset(){

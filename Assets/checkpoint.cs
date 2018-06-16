@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class checkpoint : MonoBehaviour {
 
@@ -9,7 +10,7 @@ public class checkpoint : MonoBehaviour {
 	public Vector3 NextCheckpoint(){
 		int current = trackManager.checkpoints.IndexOf(gameObject);
 		int next = current+1;
-		if (current == trackManager.checkpoints.Count)
+		if (current == trackManager.checkpoints.Count-1)
 			next = 0;
 		return trackManager.checkpoints[next].transform.position;
 	}
@@ -17,6 +18,10 @@ public class checkpoint : MonoBehaviour {
 	void OnTriggerEnter(Collider other){
 		if (other.tag=="Player"){
 			other.GetComponent<carController>().lastCheckpoint=gameObject;
+			carAI ai = other.GetComponent<carAI>();
+			if (ai){
+				ai.nextCheckpoint = NextCheckpoint();
+			}
 		}
 	}
 }

@@ -52,7 +52,7 @@ public class carManager : MonoBehaviour {
 
 	void hasCheckpoint(){
 		foreach (carController car in cars){
-			if (car.lastCheckpoint) continue;
+			if (car.lastCheckpoint || trackManager.checkpoints.Count<1) continue;
 			car.lastCheckpoint = trackManager.checkpoints[0];
 			car.Reset();
 		}

@@ -270,8 +270,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1130217298421650}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -28.7, y: 18.1, z: -14.16}
-  m_LocalScale: {x: 1, y: 1, z: 3}
+  m_LocalPosition: {x: -27.41, y: 18, z: -17.16}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1.2}
   m_Children:
   - {fileID: 4582984774646382}
   m_Father: {fileID: 0}
@@ -366,7 +366,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 0c81e7187c94394408b41a3f7562e883, type: 2}
+  - {fileID: 2100000, guid: b4bdf1973ac9ff742b0562bb2fefcc26, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -573,7 +573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b72f5b6f8551fd47a891677ac4569e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerID: 2
+  playerID: 1
   axleInfos:
   - leftWheel: {fileID: 146123944073527994}
     rightWheel: {fileID: 146400570456123322}
