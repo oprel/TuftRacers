@@ -22,4 +22,9 @@ public class carAI : MonoBehaviour {
 		carController.applyWheels(motor,steering);
 	}
 
+	public void setNextTarget(Transform t){
+		nextCheckpoint = t.position;
+		nextCheckpoint += carController.carOffset(t);
+	}
+
 }

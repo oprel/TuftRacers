@@ -20,7 +20,7 @@
     }
  
         SubShader{
-            Tags {"Queue" = "Transparent" "RenderType"="Transparent" }
+            Tags {"Queue" = "Transparent" "RenderType"="Transparent+1000" }
             LOD 200 
             Blend SrcAlpha OneMinusSrcAlpha        
         

@@ -7,7 +7,7 @@
    }
    SubShader {
 
-	        Tags {"Queue" = "Transparent" "RenderType"="Transparent" "DisableBatching" = "True" }
+	        Tags {"Queue" = "Transparent" "RenderType"="TransparentCutout" "DisableBatching" = "True" }
             LOD 200 
             Blend SrcAlpha OneMinusSrcAlpha       
       Pass {  
@@ -16,7 +16,6 @@
  
          #pragma vertex vert  
          #pragma fragment frag
-		 #pragma alpha:fade
 
          // User-specified uniforms            
          uniform sampler2D _MainTex;        

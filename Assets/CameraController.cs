@@ -29,6 +29,7 @@ public class CameraController : MonoBehaviour {
 		// Calculate the new distance.
 		distanceBetweenPlayers = 0;
 		foreach (carController car in carManager.cars){
+			if (!car.gameObject.activeInHierarchy) continue;
 			float d = Vector3.Distance(car.transform.position,carManager.averagePos);
 			if (d > distanceBetweenPlayers) distanceBetweenPlayers = d;
 		}

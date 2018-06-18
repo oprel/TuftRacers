@@ -18,14 +18,17 @@ public class carController : MonoBehaviour {
     public float maxMotorTorque;
     public float maxSteeringAngle;
     public GameObject lastCheckpoint;
+    public int order;
 
-    private Rigidbody rigidbody;
+    [HideInInspector]
+    public Rigidbody rigidbody;
     private float knockoutTimer;
     private carAI carAI;
 
 
 	 void Start(){
-         rigidbody = GetComponent<Rigidbody>();
+        order = playerID-1;
+        rigidbody = GetComponent<Rigidbody>();
         carManager.cars.Add(this);
         foreach (AxleInfo axleInfo in axleInfos) {
             axleInfo.leftWheel.ConfigureVehicleSubsteps(8,20,20);
@@ -55,7 +58,7 @@ public class carController : MonoBehaviour {
     public void FixedUpdate()
     {
         Debug.DrawLine(transform.position,carManager.averagePos);
-        if (!carAI){
+        if (!carAI || !carAI.enabled){
             float motor = maxMotorTorque * Input.GetAxis("Vertical " + playerID);
             float steering = maxSteeringAngle * Input.GetAxis("Horizontal " + playerID);
             applyWheels(motor,steering);
@@ -98,11 +101,21 @@ public class carController : MonoBehaviour {
 
     public void Reset(){
         rigidbody.velocity = Vector3.zero;
-            rigidbody.angularVelocity = Vector3.zero;
+        rigidbody.angularVelocity = Vector3.zero;
+        if (!lastCheckpoint) {
+            gameObject.SetActive(false);
+            return;
+        }
+        
+        Transform t = lastCheckpoint.transform;
+        int c = carManager.cars.Count-1;
+        transform.position = t.position + carOffset(t) + 5* Vector3.up;
+        transform.rotation = t.rotation;
+    }
 
-            Transform t = lastCheckpoint.transform;
-            int c = carManager.cars.Count-1;
-            transform.position = t.position - t.right * carManager.carWidth * (c/2 + playerID-1) + 5* Vector3.up;
-            transform.rotation = t.rotation;
+    public Vector3 carOffset(Transform t){
+        int c = carManager.cars.Count-1;
+        return  t.right * carManager.carWidth * (c/2 - order);
+
     }
 }

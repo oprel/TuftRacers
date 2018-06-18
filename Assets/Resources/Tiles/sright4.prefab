@@ -176,7 +176,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1246070126196526}
-  m_Mesh: {fileID: 4300000, guid: 4b4b0740472d3e14cb437de89b088c6e, type: 3}
+  m_Mesh: {fileID: 4300002, guid: af8188510b295ec428b980ff75e4b6c4, type: 3}
 --- !u!64 &64352128498673540
 MeshCollider:
   m_ObjectHideFlags: 1
@@ -190,7 +190,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_SkinWidth: 0.01
-  m_Mesh: {fileID: 4300000, guid: 4b4b0740472d3e14cb437de89b088c6e, type: 3}
+  m_Mesh: {fileID: 4300002, guid: af8188510b295ec428b980ff75e4b6c4, type: 3}
 --- !u!114 &114470591779814108
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -203,6 +203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+  parentTile: {fileID: 0}
 --- !u!114 &114474366074362886
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -215,6 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+  parentTile: {fileID: 0}
 --- !u!114 &114573032072807560
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -239,6 +241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+  parentTile: {fileID: 0}
 --- !u!135 &135057646756525902
 SphereCollider:
   m_ObjectHideFlags: 1

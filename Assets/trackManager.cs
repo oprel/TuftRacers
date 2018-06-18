@@ -30,8 +30,11 @@ public class trackManager : MonoBehaviour {
     private Vector2 hexSize = new Vector2(hexScale,hexScale*Mathf.Sqrt(3)/2);
     public float gap = 0.0f;
 
+	public int maxTiles;
+
 	public GameObject finishPrefab;
 	private GameObject finishTile;
+	private GameObject cullTile;
 
 	private int update;
 
@@ -76,7 +79,7 @@ public class trackManager : MonoBehaviour {
 	void FixedUpdate(){
 		update++;
 		finishTile.transform.position = grid[cursor.x,cursor.y];
-		CullTiles();
+		if (cullTile != carManager.leadTile) StartCoroutine(TileCulling());
 		if (update>100){
 			update=0;
 			GameObject lead = carManager.playerInLead;
@@ -92,11 +95,24 @@ public class trackManager : MonoBehaviour {
 		
 	}
 
-	void CullTiles(){
-		if (tileHistory.Count>5){
-			Destroy(tileHistory[0]);
+	IEnumerator TileCulling(){
+		cullTile = carManager.leadTile;
+		int i = tileHistory.IndexOf(cullTile) - maxTiles;
+		if (i>0){
+			while (i>0){
+				i--;
+				Destroy(tileHistory[0]);
+				tileHistory.RemoveAt(0);
+				yield return new WaitForSeconds(0);
+			}
 		}
 
+
+	}
+
+	void RemoveTile(int i){
+			Destroy(tileHistory[0]);
+			tileHistory.RemoveAt(0);
 	}
 
 
@@ -158,7 +174,7 @@ public class trackManager : MonoBehaviour {
 		tile.coordinates = cursor;
 		checkpoint[] c = o.GetComponentsInChildren<checkpoint>();
 		foreach (checkpoint p in c){
-			addCheckpoint(p.gameObject);
+			addCheckpoint(p.gameObject,o);
 		}
 		
 		MoveCursor(direction);
@@ -197,11 +213,11 @@ public class trackManager : MonoBehaviour {
 		}
 	}
 
-	void addCheckpoint(GameObject checkpoint){
+	void addCheckpoint(GameObject checkpoint, GameObject parentTile){
+		checkpointCounter++;
 		if (checkpoints.Count>0) checkpoints[checkpoints.Count-1].transform.LookAt(checkpoint.transform);
 		checkpoints.Add(checkpoint);
-		checkpointCounter++;
-		checkpoint.GetComponent<checkpoint>().id = checkpointCounter;
+		checkpoint.GetComponent<checkpoint>().Init(checkpointCounter, parentTile);
 		checkpoint.name = "Checkpoint " + checkpointCounter;
 	}
 

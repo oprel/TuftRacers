@@ -10,6 +10,7 @@ public class carManager : MonoBehaviour {
 	public static float stuckTimer = 2;
 	public static GameObject playerInLead;
 	public static int leadCounter = 0;
+	public static GameObject leadTile;
 
 	private trackManager trackManager;
 
@@ -32,19 +33,21 @@ public class carManager : MonoBehaviour {
 		{
 			Vector3 pos = new Vector3();
 			int numTargets = 0;
-
+			
 			for (int i = 0; i < cars.Count; i++)
 			{
-				if (!cars[i].gameObject.activeSelf)
+				carController car = cars[i];
+				if (!car.gameObject.activeInHierarchy)
 					continue;
 
-				pos += cars[i].transform.position;
+				pos += car.transform.position;
+				pos += car.rigidbody.velocity.magnitude/3  * car.transform.forward;
 				numTargets++;
 			}
 
 			if (numTargets > 0)
 				pos /= numTargets;
-			averagePos=Vector3.Lerp(averagePos,pos,.1f);
+			averagePos=Vector3.Lerp(averagePos,pos,.08f);
 		}
 	
 	// Update is called once per frame
@@ -52,7 +55,14 @@ public class carManager : MonoBehaviour {
 		FindAveragePosition();
 		hasCheckpoint();
 		Shader.SetGlobalVector("_DissolvePosition", averagePos);
-		
+		if (Random.value>.9f){
+			foreach (carController car in cars){
+				carController car2 = cars[Random.Range(0,cars.Count)];
+				int i = car.order;
+				car.order = car2.order;
+				car2.order = i;
+			}
+		}
 	}
 
 	void OnDrawGizmosSelected() {
@@ -70,6 +80,8 @@ public class carManager : MonoBehaviour {
 
 	public static void resetCars(){
 		foreach (carController car in cars){
+			car.gameObject.SetActive(true);
+			Debug.Log("should be active bro");
 			car.Reset();
 		}
 	}
