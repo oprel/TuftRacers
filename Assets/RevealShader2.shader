@@ -61,6 +61,8 @@ void surf (Input IN, inout SurfaceOutputStandard o) {
 	float2 c = lerp(local,world,_LocalWorld);
 	float checker = frac(c.x/2 + c.y/2 + _LocalWorld* world.z/2) * 2;
 	col = lerp(_Color, col, step(0.0,0.5-checker));
+	
+	
 	float lx = step(_LineWidth, IN.uv_MainTex.x);
 	float ly = step(_LineWidth, IN.uv_MainTex.y);
 	float hx = step(IN.uv_MainTex.x, 1.0 - _LineWidth);

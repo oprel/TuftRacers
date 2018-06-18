@@ -18,10 +18,19 @@ public class checkpoint : MonoBehaviour {
 	void OnTriggerEnter(Collider other){
 		if (other.tag=="Player"){
 			other.GetComponent<carController>().lastCheckpoint=gameObject;
+			UpdateLead(other.gameObject);
+
 			carAI ai = other.GetComponent<carAI>();
 			if (ai){
 				ai.nextCheckpoint = NextCheckpoint();
 			}
+		}
+	}
+
+	void UpdateLead(GameObject player){
+		if (id>carManager.leadCounter){
+			carManager.leadCounter=id;
+			carManager.playerInLead=player;
 		}
 	}
 }

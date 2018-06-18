@@ -18,7 +18,7 @@ public class carController : MonoBehaviour {
     public float maxMotorTorque;
     public float maxSteeringAngle;
     public GameObject lastCheckpoint;
-    public GameObject pickup;
+
     private Rigidbody rigidbody;
     private float knockoutTimer;
     private carAI carAI;
@@ -60,10 +60,6 @@ public class carController : MonoBehaviour {
             float steering = maxSteeringAngle * Input.GetAxis("Horizontal " + playerID);
             applyWheels(motor,steering);
        
-        }
-        if (Random.value>.99f){
-            //GameObject o = Instantiate(pickup,transform.position,Quaternion.identity);
-            //o.GetComponent<tilePickup>().sourcePlayer = gameObject;
         }
     }
 

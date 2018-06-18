@@ -30,6 +30,9 @@ public class trackManager : MonoBehaviour {
     private Vector2 hexSize = new Vector2(hexScale,hexScale*Mathf.Sqrt(3)/2);
     public float gap = 0.0f;
 
+	public GameObject finishPrefab;
+	private GameObject finishTile;
+
 	private int update;
 
 	public struct tile{
@@ -42,45 +45,58 @@ public class trackManager : MonoBehaviour {
 		}
 	}
 
+	public GameObject pickup;
+
 	void Start()
     {
+		if (!finishTile) finishTile = Instantiate(finishPrefab);
 		self = this;
 		foreach (GameObject c in checkpoints){
 			Destroy(c);
 		}
 		checkpoints.Clear();
-		//tileObjs = Resources.LoadAll("Tiles") as GameObject[];
+		
+		
+		loadTiles();
+		CreateGrid();
+		
+		for (int i = 0; i<5; i++){
+			AutoTile();
+		}
+	
+    }
+
+	void loadTiles(){
 		for (int i =0; i<5;i++){tileObjs.Add(new List<GameObject>());};
 		foreach (GameObject obj in new List<GameObject>(Resources.LoadAll<GameObject>("Tiles"))){
 			int i= obj.GetComponent<trackTile>().directionDelta+2;
 			tileObjs[i].Add(obj);
 		};
-		
-		CreateGrid();
-		
-	/* 
-		for (int i = 0; i<gridSize; i++){
-			for (int j = 0; j<gridSize; j++){
-				 placedTiles[i,j] = Instantiate(hexPrefab,grid[i,j],Quaternion.identity, transform);
-			}
-		}
-		*/
-		for (int i = 0; i<5; i++){
-			AutoTile();
-		}
-		
-	
-    }
-
+	}
 	void FixedUpdate(){
 		update++;
-		if (update>10){
-			newTile(Random.Range(-2,3));
-			if (tileHistory.Count>200) Clear();
-			Debug.ClearDeveloperConsole();
+		finishTile.transform.position = grid[cursor.x,cursor.y];
+		CullTiles();
+		if (update>100){
 			update=0;
+			GameObject lead = carManager.playerInLead;
+			if (lead){
+				GameObject o = Instantiate(pickup,lead.transform.position + Vector3.up,Quaternion.identity);
+				o.GetComponent<tilePickup>().sourcePlayer = lead;
+			}
+			//newTile(Random.Range(-2,3));
+			//if (tileHistory.Count>200) Clear();
+			//Debug.ClearDeveloperConsole();
+			
 		}
 		
+	}
+
+	void CullTiles(){
+		if (tileHistory.Count>5){
+			Destroy(tileHistory[0]);
+		}
+
 	}
 
 
@@ -128,8 +144,9 @@ public class trackManager : MonoBehaviour {
 			}while(!validPath(d));
 		}
 		CreateTile(GetRandomTile(d));
-		
 	}
+
+
 	void CreateTile(GameObject obj){
 		
 		GameObject o = Instantiate(obj,grid[cursor.x,cursor.y],Quaternion.Euler(0,120+direction*60,0), transform);
@@ -141,14 +158,14 @@ public class trackManager : MonoBehaviour {
 		tile.coordinates = cursor;
 		checkpoint[] c = o.GetComponentsInChildren<checkpoint>();
 		foreach (checkpoint p in c){
-			checkpoints.Add(p.gameObject);
+			addCheckpoint(p.gameObject);
 		}
 		
 		MoveCursor(direction);
 
 	}
 
-	void Clear(){
+	public void Clear(){
 		foreach (GameObject o in tileHistory){
 			Destroy(o);
 		}
@@ -157,7 +174,9 @@ public class trackManager : MonoBehaviour {
 		cursor = new tile(gridSize/2,gridSize/2);
 		tileHistory.Clear();
 		checkpoints.Clear();
+		carManager.Reset();
 		Start();
+		
 	}
 
 	GameObject GetRandomTile(int d){
@@ -173,12 +192,17 @@ public class trackManager : MonoBehaviour {
 
 		foreach( GameObject checkpoint in GameObject.FindGameObjectsWithTag("checkpoint")){
 			if (checkpoints.IndexOf(checkpoint) < 0){
-				checkpoints.Add(checkpoint);
-				checkpointCounter++;
-				checkpoint.GetComponent<checkpoint>().id = checkpointCounter;
-				checkpoint.name = "Checkpoint " + checkpointCounter;
+				
 			}
 		}
+	}
+
+	void addCheckpoint(GameObject checkpoint){
+		if (checkpoints.Count>0) checkpoints[checkpoints.Count-1].transform.LookAt(checkpoint.transform);
+		checkpoints.Add(checkpoint);
+		checkpointCounter++;
+		checkpoint.GetComponent<checkpoint>().id = checkpointCounter;
+		checkpoint.name = "Checkpoint " + checkpointCounter;
 	}
 
 	void MoveCursor(int d){
@@ -273,7 +297,7 @@ public class trackManager : MonoBehaviour {
         }
     }
 
-	int mod(int x, int m) {
+	public static int mod(int x, int m) {
 		int r = x%m;
 		return r<0 ? r+m : r;
 	}

@@ -24,7 +24,6 @@
 		struct Input {
 			float2 uv_MainTex2 : TEXCOORD0;
 			float3 worldPos;
-			float4 screenPos;
 
 		};
 

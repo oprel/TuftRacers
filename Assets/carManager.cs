@@ -8,7 +8,8 @@ public class carManager : MonoBehaviour {
 	public static Vector3 averagePos;
 	public static float carWidth = 2;
 	public static float stuckTimer = 2;
-	public GameObject circle;
+	public static GameObject playerInLead;
+	public static int leadCounter = 0;
 
 	private trackManager trackManager;
 
@@ -17,10 +18,19 @@ public class carManager : MonoBehaviour {
 		hasCheckpoint();
 		
 	}
+
+	public static void Reset(){
+		leadCounter = 0;
+		playerInLead = null;
+		resetCars();
+	}
+
+
+	
 	// Use this for initialization
 	private void FindAveragePosition()
 		{
-			averagePos = new Vector3();
+			Vector3 pos = new Vector3();
 			int numTargets = 0;
 
 			for (int i = 0; i < cars.Count; i++)
@@ -28,19 +38,19 @@ public class carManager : MonoBehaviour {
 				if (!cars[i].gameObject.activeSelf)
 					continue;
 
-				averagePos += cars[i].transform.position;
+				pos += cars[i].transform.position;
 				numTargets++;
 			}
 
 			if (numTargets > 0)
-				averagePos /= numTargets;
+				pos /= numTargets;
+			averagePos=Vector3.Lerp(averagePos,pos,.1f);
 		}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
 		FindAveragePosition();
 		hasCheckpoint();
-		//circle.transform.position = averagePos;
 		Shader.SetGlobalVector("_DissolvePosition", averagePos);
 		
 	}
@@ -54,6 +64,12 @@ public class carManager : MonoBehaviour {
 		foreach (carController car in cars){
 			if (car.lastCheckpoint || trackManager.checkpoints.Count<1) continue;
 			car.lastCheckpoint = trackManager.checkpoints[0];
+			car.Reset();
+		}
+	}
+
+	public static void resetCars(){
+		foreach (carController car in cars){
 			car.Reset();
 		}
 	}
