@@ -10,7 +10,7 @@ public class carAI : MonoBehaviour {
 	public float gas = .5f;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		carController = GetComponent<carController>();
 	}
 	

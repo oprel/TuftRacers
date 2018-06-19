@@ -104,6 +104,7 @@ public class carController : MonoBehaviour {
         rigidbody.angularVelocity = Vector3.zero;
         if (!lastCheckpoint) {
             gameObject.SetActive(false);
+            carManager.carsInPlay--;
             return;
         }
         

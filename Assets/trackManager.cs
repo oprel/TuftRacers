@@ -143,7 +143,7 @@ public class trackManager : MonoBehaviour {
 			}
 		}while (!validPath(d));
 		CreateTile(obj);
-		tileHistory[tileHistory.Count-1].GetComponent<Renderer>().material = testMaterial;
+		//tileHistory[tileHistory.Count-1].GetComponent<Renderer>().material = testMaterial;
 	}
 
 	public void newTile(int d){

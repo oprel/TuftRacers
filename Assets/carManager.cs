@@ -10,19 +10,22 @@ public class carManager : MonoBehaviour {
 	public static float stuckTimer = 2;
 	public static GameObject playerInLead;
 	public static int leadCounter = 0;
+	public static int carsInPlay = cars.Count;
 	public static GameObject leadTile;
+	private static Coroutine ending;
 
 	private trackManager trackManager;
 
 	void Start(){
 		trackManager = GetComponent<trackManager>();
-		hasCheckpoint();
+		Reset();
 		
 	}
 
 	public static void Reset(){
 		leadCounter = 0;
 		playerInLead = null;
+		ending = null;
 		resetCars();
 	}
 
@@ -44,6 +47,7 @@ public class carManager : MonoBehaviour {
 				pos += car.rigidbody.velocity.magnitude/3  * car.transform.forward;
 				numTargets++;
 			}
+			carsInPlay = numTargets;
 
 			if (numTargets > 0)
 				pos /= numTargets;
@@ -52,6 +56,10 @@ public class carManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+		if (ending == null && playerInLead && carsInPlay<2){
+			ending = StartCoroutine(Winner(playerInLead.GetComponent<carController>().playerID));
+		}
+
 		FindAveragePosition();
 		hasCheckpoint();
 		Shader.SetGlobalVector("_DissolvePosition", averagePos);
@@ -72,7 +80,7 @@ public class carManager : MonoBehaviour {
 
 	void hasCheckpoint(){
 		foreach (carController car in cars){
-			if (car.lastCheckpoint || trackManager.checkpoints.Count<1) continue;
+			if ( !car.gameObject.activeInHierarchy ||car.lastCheckpoint || trackManager.checkpoints.Count<1) continue;
 			car.lastCheckpoint = trackManager.checkpoints[0];
 			car.Reset();
 		}
@@ -80,10 +88,20 @@ public class carManager : MonoBehaviour {
 
 	public static void resetCars(){
 		foreach (carController car in cars){
+			//car.Reset();
 			car.gameObject.SetActive(true);
 			Debug.Log("should be active bro");
-			car.Reset();
 		}
+	}
+
+	public static IEnumerator Winner(int id){
+		UIManager.self.showText("PLAYER " + id + " WINS");
+		Debug.Log("Winner");
+		yield return new WaitForSeconds(2.2f);
+		foreach (carController car in cars){
+			car.gameObject.SetActive(true);
+		}
+		trackManager.self.Clear();
 	}
 	
 
