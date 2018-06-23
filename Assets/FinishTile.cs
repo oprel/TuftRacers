@@ -6,7 +6,7 @@ public class FinishTile : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other){
 		if (other.tag=="Player"){
-			trackManager.self.Clear();
+			gameManager.Winner(other.GetComponent<carController>());
 		}
 	}
 }

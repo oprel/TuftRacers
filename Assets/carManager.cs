@@ -7,20 +7,29 @@ public class carManager : MonoBehaviour {
 	public static List<carController> cars = new List<carController>();
 	public static Vector3 averagePos;
 	public static float carWidth = 2;
-	public static float stuckTimer = 2;
-	public static GameObject playerInLead;
+	public static float stuckTimer = 1;
+	public static carController playerInLead;
 	public static int leadCounter = 0;
 	public static int carsInPlay = cars.Count;
 	public static GameObject leadTile;
-	private static Coroutine ending;
+	public static Coroutine ending;
 
 	private trackManager trackManager;
 
-	void Start(){
+	void Awake(){
 		trackManager = GetComponent<trackManager>();
 		Reset();
-		
+		GameObject[] findcars = GameObject.FindGameObjectsWithTag("Player");
+		foreach (GameObject findcar in findcars){
+			carController car = findcar.GetComponent<carController>();
+			if (car && !cars.Contains(car)){
+				cars.Add(car);
+			}
+		}
 	}
+
+
+
 
 	public static void Reset(){
 		leadCounter = 0;
@@ -56,8 +65,8 @@ public class carManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		if (ending == null && playerInLead && carsInPlay<2){
-			ending = StartCoroutine(Winner(playerInLead.GetComponent<carController>().playerID));
+		if (playerInLead && carsInPlay<2){
+			gameManager.Winner(playerInLead);
 		}
 
 		FindAveragePosition();
@@ -88,21 +97,12 @@ public class carManager : MonoBehaviour {
 
 	public static void resetCars(){
 		foreach (carController car in cars){
-			//car.Reset();
+			car.Reset();
 			car.gameObject.SetActive(true);
-			Debug.Log("should be active bro");
 		}
 	}
 
-	public static IEnumerator Winner(int id){
-		UIManager.self.showText("PLAYER " + id + " WINS");
-		Debug.Log("Winner");
-		yield return new WaitForSeconds(2.2f);
-		foreach (carController car in cars){
-			car.gameObject.SetActive(true);
-		}
-		trackManager.self.Clear();
-	}
+	
 	
 
 }

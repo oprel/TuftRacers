@@ -50,7 +50,7 @@ public class trackManager : MonoBehaviour {
 
 	public GameObject pickup;
 
-	void Start()
+	void Awake()
     {
 		if (!finishTile) finishTile = Instantiate(finishPrefab);
 		self = this;
@@ -82,7 +82,7 @@ public class trackManager : MonoBehaviour {
 		if (cullTile != carManager.leadTile) StartCoroutine(TileCulling());
 		if (update>100){
 			update=0;
-			GameObject lead = carManager.playerInLead;
+			GameObject lead = carManager.playerInLead.gameObject;
 			if (lead){
 				GameObject o = Instantiate(pickup,lead.transform.position + Vector3.up,Quaternion.identity);
 				o.GetComponent<tilePickup>().sourcePlayer = lead;
@@ -190,8 +190,7 @@ public class trackManager : MonoBehaviour {
 		cursor = new tile(gridSize/2,gridSize/2);
 		tileHistory.Clear();
 		checkpoints.Clear();
-		carManager.Reset();
-		Start();
+		Awake();
 		
 	}
 

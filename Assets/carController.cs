@@ -2,39 +2,33 @@
 using System.Collections;
 using System.Collections.Generic;
 
-[System.Serializable]
-public class AxleInfo {
-	
-
-    public WheelCollider leftWheel;
-    public WheelCollider rightWheel;
-    public bool motor;
-    public bool steering;
-}
      
 public class carController : MonoBehaviour {
 	public int playerID = 1;
-    public List<AxleInfo> axleInfos; 
+   
+    [Header("Engine")]
     public float maxMotorTorque;
     public float maxSteeringAngle;
-    public GameObject lastCheckpoint;
+    
+    
+    [Header("Game")]
+    public int wins;
     public int order;
+    public GameObject lastCheckpoint;
 
     [HideInInspector]
     public Rigidbody rigidbody;
     private float knockoutTimer;
     private carAI carAI;
+    private WheelCollider[] wheels;
 
 
-	 void Start(){
-        order = playerID-1;
+	 void Awake(){
         rigidbody = GetComponent<Rigidbody>();
-        carManager.cars.Add(this);
-        foreach (AxleInfo axleInfo in axleInfos) {
-            axleInfo.leftWheel.ConfigureVehicleSubsteps(8,20,20);
-            axleInfo.rightWheel.ConfigureVehicleSubsteps(8,20,20);
+        if (!carManager.cars.Contains(this))
+            carManager.cars.Add(this);
+        wheels = GetComponentsInChildren<WheelCollider>();
 
-		 }
         carAI = GetComponent<carAI>();
 	 }
     // finds the corresponding visual wheel
@@ -57,7 +51,7 @@ public class carController : MonoBehaviour {
      
     public void FixedUpdate()
     {
-        Debug.DrawLine(transform.position,carManager.averagePos);
+        //Debug.DrawLine(transform.position,carManager.averagePos);
         if (!carAI || !carAI.enabled){
             float motor = maxMotorTorque * Input.GetAxis("Vertical " + playerID);
             float steering = maxSteeringAngle * Input.GetAxis("Horizontal " + playerID);
@@ -74,24 +68,29 @@ public class carController : MonoBehaviour {
     }
 
     public void applyWheels(float motor, float steering){
-         foreach (AxleInfo axleInfo in axleInfos) {
-            if (axleInfo.steering) {
-                axleInfo.leftWheel.steerAngle = steering;
-                axleInfo.rightWheel.steerAngle = steering;
-            }else{
-				axleInfo.leftWheel.steerAngle = -steering;
-                axleInfo.rightWheel.steerAngle = -steering;
-			}
-            if (axleInfo.motor) {
-                axleInfo.leftWheel.motorTorque = motor;
-                axleInfo.rightWheel.motorTorque = motor;
-            }
-            ApplyLocalPositionToVisuals(axleInfo.leftWheel);
-            ApplyLocalPositionToVisuals(axleInfo.rightWheel);
-        }
+       		foreach (WheelCollider wheel in wheels)
+		{
+			// a simple car where front wheels steer while rear ones drive
+			if (wheel.transform.localPosition.z > 0)
+				wheel.steerAngle = steering;
 
+			if (wheel.transform.localPosition.z < 0)
+				wheel.motorTorque = motor;
+
+			// update visual wheels if any
+            Quaternion q;
+            Vector3 p;
+            wheel.GetWorldPose (out p, out q);
+
+            // assume that the only child of the wheelcollider is the wheel shape
+            Transform shapeTransform = wheel.transform.GetChild (0);
+            shapeTransform.position = p;
+            shapeTransform.rotation = q;
+
+		}
+        
          //check if car is stuck
-        if (motor == maxMotorTorque && Vector3.Magnitude(rigidbody.velocity)<.1f){
+        if ((!wheels[0].isGrounded ||motor == maxMotorTorque) && Vector3.Magnitude(rigidbody.velocity)<.1f){
             knockoutTimer+= Time.deltaTime;
             if (knockoutTimer > carManager.stuckTimer) Reset();
         }else{
@@ -102,6 +101,11 @@ public class carController : MonoBehaviour {
     public void Reset(){
         rigidbody.velocity = Vector3.zero;
         rigidbody.angularVelocity = Vector3.zero;
+        if (!gameManager.self){
+            transform.position= Vector3.zero;
+            transform.rotation = Quaternion.identity;
+            return;
+        }
         if (!lastCheckpoint) {
             gameObject.SetActive(false);
             carManager.carsInPlay--;

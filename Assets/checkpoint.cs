@@ -36,7 +36,7 @@ public class checkpoint : MonoBehaviour {
 	void UpdateLead(GameObject player){
 		if (id>carManager.leadCounter){
 			carManager.leadCounter=id;
-			carManager.playerInLead=player;
+			carManager.playerInLead=player.GetComponent<carController>();
 			carManager.leadTile = parentTile;
 		}
 	}

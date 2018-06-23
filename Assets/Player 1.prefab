@@ -24,11 +24,10 @@ GameObject:
   - component: {fileID: 65515729108571314}
   - component: {fileID: 23248402817227962}
   - component: {fileID: 54362848530439032}
-  - component: {fileID: 114552746834034598}
   - component: {fileID: 114332257708414310}
   - component: {fileID: 114574909737833564}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Player 1
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -542,14 +541,14 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1130217298421650}
   serializedVersion: 2
-  m_Mass: 70
-  m_Drag: 0.1
-  m_AngularDrag: 0.05
+  m_Mass: 120
+  m_Drag: 0.2
+  m_AngularDrag: 0.2
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 2
+  m_Constraints: 64
+  m_CollisionDetection: 0
 --- !u!65 &65515729108571314
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -613,21 +612,6 @@ MonoBehaviour:
   order: 1
   antiRoll: 0
   rigidbody: {fileID: 54362848530439032}
---- !u!114 &114552746834034598
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1130217298421650}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61682be5314d0440b9e67529196ac1a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  naturalFrequency: 10
-  dampingRatio: 0.8
-  forceShift: 0.03
-  setSuspensionDistance: 1
 --- !u!114 &114574909737833564
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -662,25 +646,25 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.5
   m_SuspensionSpring:
-    spring: 1749.9999
-    damper: 279.99997
-    targetPosition: 0
-  m_SuspensionDistance: 0.2
-  m_ForceAppPointDistance: 0.97
-  m_Mass: 20
+    spring: 3
+    damper: 500
+    targetPosition: 0.5
+  m_SuspensionDistance: 0.5
+  m_ForceAppPointDistance: 1
+  m_Mass: 10
   m_WheelDampingRate: 0.25
   m_ForwardFriction:
-    m_ExtremumSlip: 1
+    m_ExtremumSlip: 0.001
     m_ExtremumValue: 1
     m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 2
+    m_Stiffness: 3
   m_SidewaysFriction:
-    m_ExtremumSlip: 1
+    m_ExtremumSlip: 0.001
     m_ExtremumValue: 1
     m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 2
+    m_Stiffness: 6
   m_Enabled: 1
 --- !u!146 &146184968637788386
 WheelCollider:
@@ -691,25 +675,25 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.5
   m_SuspensionSpring:
-    spring: 1749.9999
-    damper: 279.99997
-    targetPosition: 0
-  m_SuspensionDistance: 0.2
-  m_ForceAppPointDistance: 0.97
-  m_Mass: 20
+    spring: 3
+    damper: 500
+    targetPosition: 0.5
+  m_SuspensionDistance: 0.5
+  m_ForceAppPointDistance: 1
+  m_Mass: 10
   m_WheelDampingRate: 0.25
   m_ForwardFriction:
-    m_ExtremumSlip: 1
+    m_ExtremumSlip: 0.001
     m_ExtremumValue: 1
     m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 2
+    m_Stiffness: 3
   m_SidewaysFriction:
-    m_ExtremumSlip: 1
+    m_ExtremumSlip: 0.001
     m_ExtremumValue: 1
     m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 2
+    m_Stiffness: 6
   m_Enabled: 1
 --- !u!146 &146400570456123322
 WheelCollider:
@@ -720,25 +704,25 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.5
   m_SuspensionSpring:
-    spring: 1750.0002
-    damper: 280.00003
-    targetPosition: 0
-  m_SuspensionDistance: 0.2
-  m_ForceAppPointDistance: 0.97
-  m_Mass: 20
+    spring: 3
+    damper: 500
+    targetPosition: 0.5
+  m_SuspensionDistance: 0.5
+  m_ForceAppPointDistance: 1
+  m_Mass: 10
   m_WheelDampingRate: 0.25
   m_ForwardFriction:
-    m_ExtremumSlip: 1
+    m_ExtremumSlip: 0.001
     m_ExtremumValue: 1
     m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 2
+    m_Stiffness: 3
   m_SidewaysFriction:
-    m_ExtremumSlip: 1
+    m_ExtremumSlip: 0.001
     m_ExtremumValue: 1
     m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 2
+    m_Stiffness: 6
   m_Enabled: 1
 --- !u!146 &146449951886306866
 WheelCollider:
@@ -749,25 +733,25 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.5
   m_SuspensionSpring:
-    spring: 1750.0002
-    damper: 280.00003
-    targetPosition: 0
-  m_SuspensionDistance: 0.2
-  m_ForceAppPointDistance: 0.96999997
-  m_Mass: 20
+    spring: 3
+    damper: 500
+    targetPosition: 0.5
+  m_SuspensionDistance: 0.5
+  m_ForceAppPointDistance: 1
+  m_Mass: 10
   m_WheelDampingRate: 0.25
   m_ForwardFriction:
-    m_ExtremumSlip: 1
+    m_ExtremumSlip: 0.001
     m_ExtremumValue: 1
     m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 2
+    m_Stiffness: 3
   m_SidewaysFriction:
-    m_ExtremumSlip: 1
+    m_ExtremumSlip: 0.001
     m_ExtremumValue: 1
     m_AsymptoteSlip: 1
     m_AsymptoteValue: 1
-    m_Stiffness: 2
+    m_Stiffness: 6
   m_Enabled: 1
 --- !u!198 &198495855952979916
 ParticleSystem:

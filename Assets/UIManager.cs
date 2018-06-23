@@ -7,8 +7,9 @@ public class UIManager : MonoBehaviour {
 
 	public static UIManager self;
 	public Text centerDisplay;
+	public Text scoreDisplay;
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		self = this;
 	}
 	
@@ -27,6 +28,14 @@ public class UIManager : MonoBehaviour {
 		yield return new WaitForSeconds(sec);
 		obj.enabled = false;
 
+	}
+
+	public static void updateScoreDisplay(){
+		string txt = "";
+		foreach (carController car in carManager.cars){
+			txt+= "PLAYER " + car.playerID + ": " + car.wins +"/"+gameManager.self.roundsToWin+"\n";
+		}
+		self.scoreDisplay.text = txt;
 	}
 
 }

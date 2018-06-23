@@ -6,12 +6,14 @@ public class carAI : MonoBehaviour {
 
 	[HideInInspector]
 	public Vector3 nextCheckpoint;
+	public Material AIColor;
 	private carController carController;
 	public float gas = .5f;
 
 	// Use this for initialization
 	void Awake () {
 		carController = GetComponent<carController>();
+		GetComponent<Renderer>().material = AIColor;
 	}
 	
 	// Update is called once per frame
