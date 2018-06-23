@@ -12,17 +12,33 @@ public class gameManager : MonoBehaviour {
 	public int AIAmount;
 	public Material[] carColors;
 	public static Coroutine ending;
+	public GameObject pickup;
+	private int update;
 
 	void Start () {
 		self = this;
 		SpawnCars();
 		newRound();
 		UIManager.updateScoreDisplay();
+		Time.timeScale=1.5f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		update++;
+		if (update>100){
+			update=0;
+			return;
+			GameObject lead = carManager.playerInLead.gameObject;
+			if (lead){
+				GameObject o = Instantiate(pickup,lead.transform.position + Vector3.up,Quaternion.identity);
+				o.GetComponent<tilePickup>().sourcePlayer = lead;
+			}
+			//newTile(Random.Range(-2,3));
+			//if (tileHistory.Count>200) Clear();
+			//Debug.ClearDeveloperConsole();
+			
+		}
 	}
 
 	void SpawnCars(){

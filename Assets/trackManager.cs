@@ -48,7 +48,7 @@ public class trackManager : MonoBehaviour {
 		}
 	}
 
-	public GameObject pickup;
+
 
 	void Awake()
     {
@@ -80,18 +80,6 @@ public class trackManager : MonoBehaviour {
 		update++;
 		finishTile.transform.position = grid[cursor.x,cursor.y];
 		if (cullTile != carManager.leadTile) StartCoroutine(TileCulling());
-		if (update>100){
-			update=0;
-			GameObject lead = carManager.playerInLead.gameObject;
-			if (lead){
-				GameObject o = Instantiate(pickup,lead.transform.position + Vector3.up,Quaternion.identity);
-				o.GetComponent<tilePickup>().sourcePlayer = lead;
-			}
-			//newTile(Random.Range(-2,3));
-			//if (tileHistory.Count>200) Clear();
-			//Debug.ClearDeveloperConsole();
-			
-		}
 		
 	}
 

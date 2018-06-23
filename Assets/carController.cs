@@ -99,10 +99,11 @@ public class carController : MonoBehaviour {
     }
 
     public void Reset(){
+        knockoutTimer=0;
         rigidbody.velocity = Vector3.zero;
         rigidbody.angularVelocity = Vector3.zero;
         if (!gameManager.self){
-            transform.position= Vector3.zero;
+            transform.position= Vector3.right * order * carManager.carWidth;
             transform.rotation = Quaternion.identity;
             return;
         }

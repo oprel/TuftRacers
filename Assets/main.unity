@@ -418,7 +418,6 @@ MonoBehaviour:
   maxTiles: 2
   finishPrefab: {fileID: 1698555432657806, guid: 802544d8c145acd4d903340b5d77f24a,
     type: 2}
-  pickup: {fileID: 1914664008409748, guid: cb07fc2306e49f54ea0737ea50bfa3e9, type: 2}
 --- !u!114 &583103312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -432,11 +431,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roundsToWin: 5
   carPrefab: {fileID: 1130217298421650, guid: c3b4c351c7c6159459c93d1a21ae5ccd, type: 2}
-  carAmount: 2
-  AIAmount: 0
+  carAmount: 5
+  AIAmount: 3
   carColors:
   - {fileID: 2100000, guid: b4bdf1973ac9ff742b0562bb2fefcc26, type: 2}
   - {fileID: 2100000, guid: bc4572ee7902bdc419c70ad5f3d3b2ad, type: 2}
+  pickup: {fileID: 0}
 --- !u!1 &748672223
 GameObject:
   m_ObjectHideFlags: 0
@@ -636,6 +636,31 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 146184968637788386, guid: c3b4c351c7c6159459c93d1a21ae5ccd,
+        type: 2}
+      propertyPath: m_SuspensionSpring.spring
+      value: 2500.0488
+      objectReference: {fileID: 0}
+    - target: {fileID: 146184968637788386, guid: c3b4c351c7c6159459c93d1a21ae5ccd,
+        type: 2}
+      propertyPath: m_SuspensionSpring.damper
+      value: 1000.01953
+      objectReference: {fileID: 0}
+    - target: {fileID: 146449951886306866, guid: c3b4c351c7c6159459c93d1a21ae5ccd,
+        type: 2}
+      propertyPath: m_SuspensionSpring.damper
+      value: 1000.0482
+      objectReference: {fileID: 0}
+    - target: {fileID: 146400570456123322, guid: c3b4c351c7c6159459c93d1a21ae5ccd,
+        type: 2}
+      propertyPath: m_SuspensionSpring.damper
+      value: 999.98035
+      objectReference: {fileID: 0}
+    - target: {fileID: 146123944073527994, guid: c3b4c351c7c6159459c93d1a21ae5ccd,
+        type: 2}
+      propertyPath: m_SuspensionSpring.damper
+      value: 999.9518
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c3b4c351c7c6159459c93d1a21ae5ccd, type: 2}
   m_IsPrefabParent: 0
@@ -656,7 +681,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &1323254951
 MeshRenderer:
   m_ObjectHideFlags: 0
