@@ -18,6 +18,7 @@ public class checkpoint : MonoBehaviour {
 		int next = current+1;
 		if (current == trackManager.checkpoints.Count-1)
 			next = 0;
+		if (!trackManager.checkpoints[next]) return null;
 		return trackManager.checkpoints[next].transform;
 	}
 

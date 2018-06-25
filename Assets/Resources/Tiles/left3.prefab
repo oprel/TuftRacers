@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4222788167952822}
   - component: {fileID: 135072289709270594}
   - component: {fileID: 114273325708507048}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: checkpoint (1)
   m_TagString: checkpoint
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4478416282066900}
   - component: {fileID: 135740213256857756}
   - component: {fileID: 114347463756586560}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: checkpoint (2)
   m_TagString: checkpoint
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4856357698121272}
   - component: {fileID: 135993317086862636}
   - component: {fileID: 114895113052344710}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: checkpoint
   m_TagString: checkpoint
   m_Icon: {fileID: 0}

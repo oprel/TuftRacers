@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4125275120886234}
   - component: {fileID: 135900849632845768}
   - component: {fileID: 114778849522283162}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: checkpoint
   m_TagString: checkpoint
   m_Icon: {fileID: 0}
@@ -53,6 +53,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+  parentTile: {fileID: 0}
 --- !u!135 &135900849632845768
 SphereCollider:
   m_ObjectHideFlags: 1

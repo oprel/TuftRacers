@@ -14,17 +14,23 @@ public class carAI : MonoBehaviour {
 	void Awake () {
 		carController = GetComponent<carController>();
 		GetComponent<Renderer>().material = AIColor;
+		gas = gameManager.self.aiGas;
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+		float s = carManager.cars.Count;
+
+		float g = gas - .05f *(s/2 - s*carController.order);
 		Vector3 relativeVector = transform.InverseTransformPoint(nextCheckpoint);
 		float steering = (relativeVector.x / relativeVector.magnitude) * carController.maxSteeringAngle;
-		float motor = carController.maxMotorTorque*gas;
+		float motor = carController.maxMotorTorque*g;
 		carController.applyWheels(motor,steering);
+		
 	}
 
 	public void setNextTarget(Transform t){
+		if (!t) return;
 		nextCheckpoint = t.position;
 		nextCheckpoint += carController.carOffset(t);
 	}

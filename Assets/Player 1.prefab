@@ -548,7 +548,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 64
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!65 &65515729108571314
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -596,21 +596,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerID: 1
-  wins: 1
-  axleInfos:
-  - leftWheel: {fileID: 146123944073527994}
-    rightWheel: {fileID: 146400570456123322}
-    motor: 0
-    steering: 1
-  - leftWheel: {fileID: 146184968637788386}
-    rightWheel: {fileID: 146449951886306866}
-    motor: 1
-    steering: 0
   maxMotorTorque: 200
   maxSteeringAngle: 20
-  lastCheckpoint: {fileID: 0}
+  wins: 1
   order: 1
-  antiRoll: 0
+  lastCheckpoint: {fileID: 0}
   rigidbody: {fileID: 54362848530439032}
 --- !u!114 &114574909737833564
 MonoBehaviour:
@@ -624,7 +614,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextCheckpoint: {x: 1290.6741, y: 0, z: 1108.3645}
-  AIColor: {fileID: 2100000, guid: 0c81e7187c94394408b41a3f7562e883, type: 2}
+  AIColor: {fileID: 2100000, guid: f7683a9b6ed54eb448e3fb3d3d9a24c3, type: 2}
   gas: 0.7
 --- !u!114 &114643108326229034
 MonoBehaviour:

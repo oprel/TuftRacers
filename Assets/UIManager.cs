@@ -6,8 +6,10 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour {
 
 	public static UIManager self;
+	public GameObject HUD;
 	public Text centerDisplay;
 	public Text scoreDisplay;
+	
 	// Use this for initialization
 	void Awake () {
 		self = this;

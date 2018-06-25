@@ -13,22 +13,32 @@ public class gameManager : MonoBehaviour {
 	public Material[] carColors;
 	public static Coroutine ending;
 	public GameObject pickup;
+	public float aiGas = .5f;
 	private int update;
 
-	void Start () {
+	void Awake(){
 		self = this;
+		openMenu();
+	}
+
+	public void init () {
 		SpawnCars();
 		newRound();
-		UIManager.updateScoreDisplay();
 		Time.timeScale=1.5f;
+	}
+
+	public void openMenu(){
+		SceneManager.LoadSceneAsync("menu",LoadSceneMode.Additive);
+		carAmount=4;
+		AIAmount=4;
+		init();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		update++;
-		if (update>100){
+		if (update>240){
 			update=0;
-			return;
 			GameObject lead = carManager.playerInLead.gameObject;
 			if (lead){
 				GameObject o = Instantiate(pickup,lead.transform.position + Vector3.up,Quaternion.identity);
@@ -42,6 +52,10 @@ public class gameManager : MonoBehaviour {
 	}
 
 	void SpawnCars(){
+		foreach (carController car in carManager.cars){
+			if (car.gameObject)Destroy(car.gameObject);
+		}
+		
 		List<carController> cars = new List<carController>();
 		for (int i = 0; i<carAmount;i++){
 			GameObject o = Instantiate(carPrefab);
@@ -70,20 +84,20 @@ public class gameManager : MonoBehaviour {
 
 	public static IEnumerator endRound(carController winner){
 		winner.wins++;
-		if (winner.wins>=self.roundsToWin){
+		if (winner.wins>self.roundsToWin){
 			UIManager.self.showText("PLAYER " + winner.playerID + " WINS THE ENTIRE GAME");
 			yield return new WaitForSeconds(8.2f);
-		}
-
-		UIManager.self.showText("PLAYER " + winner.playerID + " WINS");
-		
-		UIManager.updateScoreDisplay();
-		yield return new WaitForSeconds(3.2f);
-		foreach (carController car in carManager.cars){
-			car.gameObject.SetActive(true);
-		}
-		gameManager.newRound();
-		ending=null;
+			self.openMenu();
+		}else{
+			UIManager.self.showText("PLAYER " + winner.playerID + " WINS");
+			
+			UIManager.updateScoreDisplay();
+			yield return new WaitForSeconds(3.2f);
+			foreach (carController car in carManager.cars){
+				car.gameObject.SetActive(true);
+			}
+			gameManager.newRound();
+			ending=null;
+		}		
 	}
-
 }
