@@ -137,7 +137,7 @@ public class carController : MonoBehaviour {
 
     public void engineSound(float motor){
         float s = motor/(maxMotorTorque - rigidbody.velocity.magnitude*5);
-        AudioSource.volume = Mathf.Lerp(AudioSource.volume,.3f +s*2,.1f);
+        AudioSource.volume = Mathf.Lerp(AudioSource.volume,.3f +s,.1f);
         AudioSource.pitch = Mathf.Lerp(AudioSource.pitch, .4f +s - order/4,.1f);
 
     }

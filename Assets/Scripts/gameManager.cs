@@ -29,7 +29,7 @@ public class gameManager : MonoBehaviour {
 		SpawnCars();
 		newRound();
 		audioManager.nextBGM();
-		Time.timeScale=1.1f;
+		Time.timeScale=1.3f;
 
 	}
 
@@ -42,6 +42,10 @@ public class gameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (Input.GetKeyDown("escape"))
+            openMenu();
+
+
 		update++;
 		if (update>240){
 			update=0;

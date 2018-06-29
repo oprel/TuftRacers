@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
+
 
 public class menuManager : MonoBehaviour {
 	private GameObject HUD;
@@ -17,6 +19,11 @@ public class menuManager : MonoBehaviour {
 		HUD = UIManager.self.HUD;
 		HUD.SetActive(false);
 	}
+
+	void FixedUpdate(){
+		if (Input.GetKeyDown("escape"))
+            Application.Quit();
+	}
 	
 	public void StartGame(){
 		gameManager = gameManager.self;
@@ -28,4 +35,6 @@ public class menuManager : MonoBehaviour {
 		SceneManager.UnloadSceneAsync("menu");
 		gameManager.self.init();
 	}
+
+
 }
