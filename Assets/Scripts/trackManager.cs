@@ -138,7 +138,6 @@ public class trackManager : MonoBehaviour {
 	public void newTile(int d){
 		
 		if (!validPath(d)){
-			int j=0;
 			do{
 				tile current = cursor;
 				AutoTile();
@@ -203,6 +202,7 @@ public class trackManager : MonoBehaviour {
 
 	void addCheckpoint(GameObject checkpoint, GameObject parentTile){
 		checkpointCounter++;
+		checkpoint.transform.LookAt(finishTile.transform);
 		if (checkpoints.Count>0) checkpoints[checkpoints.Count-1].transform.LookAt(checkpoint.transform);
 		checkpoints.Add(checkpoint);
 		checkpoint.GetComponent<checkpoint>().Init(checkpointCounter, parentTile);

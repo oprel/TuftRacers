@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 
 public class menuManager : MonoBehaviour {
 	private GameObject HUD;
 	private gameManager gameManager;
-	public intSlider playerSlider;
-	public intSlider aiSlider;
+	public intSlider carSlider;
+	public intSlider humanSlider;
 	public intSlider diffSlider;
 	
 
@@ -28,8 +27,8 @@ public class menuManager : MonoBehaviour {
 	public void StartGame(){
 		gameManager = gameManager.self;
 		HUD = UIManager.self.HUD;
-		gameManager.carAmount = playerSlider.i;
-		gameManager.AIAmount = aiSlider.i;
+		gameManager.carAmount = carSlider.i;
+		gameManager.humanAmount = humanSlider.i;
 		gameManager.aiGas = diffSlider.i/10f;
 		HUD.SetActive(true);
 		SceneManager.UnloadSceneAsync("menu");

@@ -6,8 +6,8 @@ public class carManager : MonoBehaviour {
 
 	public static List<carController> cars = new List<carController>();
 	public static Vector3 averagePos;
-	public static float carWidth = 2;
-	public static float stuckTimer = .4f;
+	public static float carWidth = 2.5f;
+	public static float stuckTimer = .7f;
 	public static carController playerInLead;
 	public static int leadCounter = 0;
 	public static int carsInPlay = cars.Count;
@@ -27,9 +27,6 @@ public class carManager : MonoBehaviour {
 			}
 		}
 	}
-
-
-
 
 	public static void Reset(){
 		leadCounter = 0;

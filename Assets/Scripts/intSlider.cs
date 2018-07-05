@@ -16,7 +16,7 @@ public class intSlider : MonoBehaviour {
 
 	void Update () {
 	 	i = Mathf.RoundToInt(slider.value);
-		text.text = label + i;
+		text.text = label + "<color=red>" + i + "</color>";
 		
 	}
 }

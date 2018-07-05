@@ -9,7 +9,8 @@
 
 	        Tags {"Queue" = "Transparent" "RenderType"="TransparentCutout" "DisableBatching" = "True" }
             LOD 200 
-            Blend SrcAlpha OneMinusSrcAlpha       
+            Blend SrcAlpha OneMinusSrcAlpha    
+            Zwrite off   
       Pass {  
 
          CGPROGRAM

@@ -7,6 +7,7 @@ public class transitionManager : MonoBehaviour {
 	public static transitionManager self;
 	public Color[] fadeColors;
 	public const float fadeSpeed = 6;
+	public static List<GameObject> pulseList = new List<GameObject>();
 
 	private void Awake() {
 		self = this;
@@ -19,7 +20,11 @@ public class transitionManager : MonoBehaviour {
 	public static void fadeOut(GameObject obj, float speed = fadeSpeed){
 		self.StartCoroutine(self.fadingOut(obj, speed));
 	}
-		public static void fadePulse(GameObject obj, float speed = fadeSpeed){
+	public static void fadeOut(GameObject obj, float speed = fadeSpeed, int i = 0){
+		self.StartCoroutine(self.fadingOut(obj, speed));
+	}
+
+	public static void fadePulse(GameObject obj, float speed = fadeSpeed){
 		self.StartCoroutine(self.fadingPulse(obj, speed));
 	}
 
@@ -28,15 +33,9 @@ public class transitionManager : MonoBehaviour {
 		Renderer Renderer = obj.GetComponent<Renderer>();
 		Material sourceMaterial = Renderer.material;
 		Renderer.material = transparentDummyMaterial(sourceMaterial);
-		for (int j = 0; j<speed; j++){
-			Renderer.material.color = Color.Lerp(sourceMaterial.color,fadeColors[fadeColors.Length-1],j/speed);
-			yield return null;
-		}
+		yield return StartCoroutine(colorLerp(sourceMaterial.color,fadeColors[fadeColors.Length-1],speed,Renderer));
 		for (int i = fadeColors.Length-2; i>=0;i--){
-			for (int j = 0; j<speed; j++){
-				Renderer.material.color = Color.Lerp(fadeColors[i+1],fadeColors[i],j/speed);
-				yield return null;
-			}
+			yield return StartCoroutine(colorLerp(fadeColors[i+1],fadeColors[i],speed,Renderer));
 		}
 		Destroy(obj);
 	}
@@ -48,43 +47,41 @@ public class transitionManager : MonoBehaviour {
 		Renderer.material = transparentDummyMaterial(sourceMaterial);
 		Renderer.material.color = fadeColors[0];
 		for (int i = 1; i<fadeColors.Length;i++){
-			for (int j = 0; j<speed; j++){
-				Renderer.material.color = Color.Lerp(fadeColors[i-1],fadeColors[i],j/speed);
-				yield return null;
-			}
+			yield return StartCoroutine(colorLerp(fadeColors[i-1],fadeColors[i],speed,Renderer));
 		}
-		for (int j = 0; j<speed; j++){
-			Renderer.material.color = Color.Lerp(fadeColors[fadeColors.Length-1],sourceMaterial.color,j/speed);
-			yield return null;
-		}
+		yield return StartCoroutine(colorLerp(fadeColors[fadeColors.Length-1],sourceMaterial.color,speed,Renderer));
+		if (!Renderer) yield break;
 		Renderer.material = sourceMaterial;
 	}
 
 	private IEnumerator fadingPulse(GameObject obj, float speed){
+		if (pulseList.Contains(obj)) yield break;
+		pulseList.Add(obj);
+
 		Renderer Renderer = obj.GetComponent<Renderer>();
 		Material sourceMaterial = Renderer.material;
 		Renderer.material = transparentDummyMaterial(sourceMaterial);
-		for (int j = 0; j<speed; j++){
-			Renderer.material.color = Color.Lerp(sourceMaterial.color,fadeColors[fadeColors.Length-1],j/speed);
-			yield return null;
-		}
+
+		yield return StartCoroutine(colorLerp(sourceMaterial.color,fadeColors[fadeColors.Length-1],speed,Renderer));
 		for (int i = fadeColors.Length-2; i>=0;i--){
-			for (int j = 0; j<speed; j++){
-				Renderer.material.color = Color.Lerp(fadeColors[i+1],fadeColors[i],j/speed);
-				yield return null;
-			}
+			yield return StartCoroutine(colorLerp(fadeColors[i+1],fadeColors[i],speed,Renderer));
 		}
+
+
 		for (int i = 1; i<fadeColors.Length;i++){
-			for (int j = 0; j<speed; j++){
-				Renderer.material.color = Color.Lerp(fadeColors[i-1],fadeColors[i],j/speed);
-				yield return null;
-			}
+			yield return StartCoroutine(colorLerp(fadeColors[i-1],fadeColors[i],speed,Renderer));
 		}
-		for (int j = 0; j<speed; j++){
-			Renderer.material.color = Color.Lerp(fadeColors[fadeColors.Length-1],sourceMaterial.color,j/speed);
+		yield return StartCoroutine(colorLerp(fadeColors[fadeColors.Length-1],sourceMaterial.color,speed,Renderer));
+		Renderer.material = sourceMaterial;
+		pulseList.Remove(obj);
+	}
+
+	public IEnumerator colorLerp(Color a, Color b, float speed, Renderer Renderer){
+		for (int i = 0; i<speed; i++){
+			if (!Renderer) yield break;
+			Renderer.material.color = Color.Lerp(a,b,i/speed);
 			yield return null;
 		}
-		Renderer.material = sourceMaterial;
 	}
 
 	public Material transparentDummyMaterial(Material sourceMat){

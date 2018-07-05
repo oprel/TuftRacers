@@ -9,11 +9,12 @@ public class gameManager : MonoBehaviour {
 	public int roundsToWin;
 	public GameObject carPrefab;
 	public int carAmount;
-	public int AIAmount;
+	public int humanAmount;
 	public Material[] carColors;
 	public static Coroutine ending;
 	public GameObject pickup;
 	public float aiGas = .5f;
+	public float timeScale = 1.5f;
 
 	private int update;
 
@@ -29,19 +30,20 @@ public class gameManager : MonoBehaviour {
 		SpawnCars();
 		newRound();
 		audioManager.nextBGM();
-		Time.timeScale=1.3f;
+		
 
 	}
 
 	public void openMenu(){
 		SceneManager.LoadSceneAsync("menu",LoadSceneMode.Additive);
 		carAmount=4;
-		AIAmount=4;
+		humanAmount=0;
 		init();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		Time.timeScale=timeScale;
 		if (Input.GetKeyDown("escape"))
             openMenu();
 
@@ -71,11 +73,11 @@ public class gameManager : MonoBehaviour {
 		for (int i = 0; i<carAmount;i++){
 			GameObject o = Instantiate(carPrefab);
 			carController car = o.GetComponent<carController>();
-			if (i<carAmount-AIAmount)o.GetComponent<Renderer>().material = carColors[i%carColors.Length];
+			if (i<humanAmount)o.GetComponent<Renderer>().material = carColors[i%carColors.Length];
 			car.playerID = i+1;
 			car.order=i;
 			o.name="Player "+ car.playerID;
-			o.GetComponent<carAI>().enabled = i>=carAmount-AIAmount;
+			o.GetComponent<carAI>().enabled = i>=humanAmount;
 			cars.Add(car);
 		}
 		carManager.cars=cars;
@@ -98,6 +100,7 @@ public class gameManager : MonoBehaviour {
 		if (winner.wins>self.roundsToWin){
 			UIManager.self.showText("PLAYER " + winner.playerID + " WINS THE ENTIRE GAME");
 			yield return new WaitForSeconds(8.2f);
+			ending=null;
 			self.openMenu();
 		}else{
 			UIManager.self.showText("PLAYER " + winner.playerID + " WINS");

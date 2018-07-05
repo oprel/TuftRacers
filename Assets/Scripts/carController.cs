@@ -16,6 +16,9 @@ public class carController : MonoBehaviour {
     public int order;
     public GameObject lastCheckpoint;
 
+    public delegate void Action();
+    public event Action ResetAll = delegate{ };
+
     [HideInInspector]
     public Rigidbody rigidbody;
     [HideInInspector]
@@ -36,7 +39,9 @@ public class carController : MonoBehaviour {
         AudioSource = GetComponent<AudioSource>();
         carAI = GetComponent<carAI>();
         
+        
 	 }
+
 
     // finds the corresponding visual wheel
     // correctly applies the transform
@@ -98,7 +103,13 @@ public class carController : MonoBehaviour {
         engineSound(motor);
         
          //check if car is stuck
-        if ((!wheels[0].isGrounded ||motor == maxMotorTorque) && Vector3.Magnitude(rigidbody.velocity)<.5f){
+         bool stuck = false;
+         foreach (WheelCollider w in wheels){
+             if (!w.isGrounded) stuck=true;
+         }
+         if (motor == maxMotorTorque) stuck=true;
+         if (carAI && carAI.enabled && motor >= maxMotorTorque * carAI.gas) stuck=true;
+        if (stuck && Vector3.Magnitude(rigidbody.velocity)<.5f){
             knockoutTimer+= Time.deltaTime;
             if (knockoutTimer > carManager.stuckTimer) Reset();
         }else{
@@ -107,7 +118,13 @@ public class carController : MonoBehaviour {
     }
 
     public void Reset(){
+        if (!lastCheckpoint) {
+            gameObject.SetActive(false);
+            carManager.carsInPlay--;
+            return;
+        }
         audioManager.playSFX(3);
+        ResetAll();
         if (transitionManager.self != null) transitionManager.fadePulse(gameObject,3);
         knockoutTimer=0;
         rigidbody.velocity = Vector3.zero;
@@ -117,14 +134,9 @@ public class carController : MonoBehaviour {
             transform.rotation = Quaternion.identity;
             return;
         }
-        if (!lastCheckpoint) {
-            gameObject.SetActive(false);
-            carManager.carsInPlay--;
-            return;
-        }
+        
         
         Transform t = lastCheckpoint.transform;
-        int c = carManager.cars.Count-1;
         transform.position = t.position + carOffset(t) + 5* Vector3.up;
         transform.rotation = t.rotation;
     }
