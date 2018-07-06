@@ -9,6 +9,7 @@ public class carController : MonoBehaviour {
     [Header("Engine")]
     public float maxMotorTorque;
     public float maxSteeringAngle;
+    public float maxSpeed;
     
     
     [Header("Game")]
@@ -18,6 +19,7 @@ public class carController : MonoBehaviour {
 
     public delegate void Action();
     public event Action ResetAll = delegate{ };
+    public event Action charging = delegate{};
 
     [HideInInspector]
     public Rigidbody rigidbody;
@@ -27,6 +29,7 @@ public class carController : MonoBehaviour {
     private carAI carAI;
     private WheelCollider[] wheels;
     private AudioSource AudioSource;
+    private float previousMotor;
 
 
 
@@ -66,9 +69,14 @@ public class carController : MonoBehaviour {
         if (!carAI || !carAI.enabled){
             float motor = maxMotorTorque * Input.GetAxis("Vertical " + playerID);
             float steering = maxSteeringAngle * Input.GetAxis("Horizontal " + playerID);
+            if (motor<0 && motor<=previousMotor) charging();
+            previousMotor = motor;
             applyWheels(motor,steering);
        
         }
+        //set maxspeed
+        //Vector3 v = Vector3.Normalize(rigidbody.velocity) * maxSpeed;
+        //if (rigidbody.velocity.magnitude>v.sqmagnitude) rigidbody.velocity = v;
 
     }
 
@@ -80,13 +88,17 @@ public class carController : MonoBehaviour {
     }
 
     public void applyWheels(float motor, float steering){
+        if (rigidbody.velocity.sqrMagnitude>maxSpeed) motor=0;
        		foreach (WheelCollider wheel in wheels)
 		{
+            
 			// a simple car where front wheels steer while rear ones drive
 			if (wheel.transform.localPosition.z > 0)
 				wheel.steerAngle = steering;
 
+            
 			if (wheel.transform.localPosition.z < 0)
+                
 				wheel.motorTorque = motor * speedMultiplier;
 
 			// update visual wheels if any
@@ -127,8 +139,13 @@ public class carController : MonoBehaviour {
         ResetAll();
         if (transitionManager.self != null) transitionManager.fadePulse(gameObject,3);
         knockoutTimer=0;
+        
+        //reset rigidbodies
         rigidbody.velocity = Vector3.zero;
         rigidbody.angularVelocity = Vector3.zero;
+        StartCoroutine(resetWheels());
+        
+        //test exception
         if (!gameManager.self){
             transform.position= Vector3.right * order * carManager.carWidth;
             transform.rotation = Quaternion.identity;
@@ -139,6 +156,16 @@ public class carController : MonoBehaviour {
         Transform t = lastCheckpoint.transform;
         transform.position = t.position + carOffset(t) + 5* Vector3.up;
         transform.rotation = t.rotation;
+    }
+
+    public IEnumerator resetWheels(){
+         foreach (WheelCollider w in wheels){
+            w.brakeTorque = Mathf.Infinity;
+        }
+        yield return null;
+         foreach (WheelCollider w in wheels){
+            w.brakeTorque = 0;
+        }
     }
 
     public Vector3 carOffset(Transform t){
@@ -152,5 +179,12 @@ public class carController : MonoBehaviour {
         AudioSource.volume = Mathf.Lerp(AudioSource.volume,.3f +s,.1f);
         AudioSource.pitch = Mathf.Lerp(AudioSource.pitch, .4f +s - order/4,.1f);
 
+    }
+
+    public bool isGrounded(){
+         foreach (WheelCollider w in wheels){
+             if (w.isGrounded) return true;
+         }
+         return false;
     }
 }

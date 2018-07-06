@@ -382,13 +382,13 @@ MonoBehaviour:
   roundsToWin: 5
   carPrefab: {fileID: 1130217298421650, guid: c3b4c351c7c6159459c93d1a21ae5ccd, type: 2}
   carAmount: 4
-  AIAmount: 4
+  humanAmount: 0
   carColors:
   - {fileID: 2100000, guid: b4bdf1973ac9ff742b0562bb2fefcc26, type: 2}
   - {fileID: 2100000, guid: bc4572ee7902bdc419c70ad5f3d3b2ad, type: 2}
   pickup: {fileID: 1914664008409748, guid: cb07fc2306e49f54ea0737ea50bfa3e9, type: 2}
   aiGas: 0.5
-  timeScale: 1.3
+  timeScale: 1
 --- !u!114 &114764701963054536
 MonoBehaviour:
   m_ObjectHideFlags: 1
