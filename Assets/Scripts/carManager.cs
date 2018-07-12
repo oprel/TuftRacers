@@ -87,7 +87,7 @@ public class carManager : MonoBehaviour {
 	void hasCheckpoint(){
 		foreach (carController car in cars){
 			if ( !car.gameObject.activeInHierarchy ||car.lastCheckpoint || trackManager.checkpoints.Count<1) continue;
-			car.lastCheckpoint = trackManager.checkpoints[0];
+			car.lastCheckpoint = trackManager.checkpoints[1];
 			car.Reset();
 		}
 	}

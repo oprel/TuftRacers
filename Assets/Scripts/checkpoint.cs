@@ -41,6 +41,12 @@ public class checkpoint : MonoBehaviour {
 			carManager.leadCounter=id;
 			carManager.playerInLead=player.GetComponent<carController>();
 			carManager.leadTile = parentTile;
+			trackManager.checkpointBuild(transform.parent.gameObject);
 		}
+	}
+
+	private void OnDrawGizmos() {
+		Gizmos.color=Color.blue;
+		Gizmos.DrawSphere(transform.position,.6f);
 	}
 }

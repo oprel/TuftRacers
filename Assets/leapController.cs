@@ -14,6 +14,7 @@ public class leapController : MonoBehaviour {
 	public GameObject killbox;
 
 	public Image display;
+	public GameObject impactParticles;
 
 
 	private float leapTimer;
@@ -70,6 +71,7 @@ public class leapController : MonoBehaviour {
 		Rigidbody.constraints = RigidbodyConstraints.None;
 		gravityMod=baseGravityMod;
 		flying = false;
+		Instantiate(impactParticles,transform);
 
 	}
 

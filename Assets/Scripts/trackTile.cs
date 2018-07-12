@@ -7,7 +7,7 @@ public class trackTile : MonoBehaviour {
 	public trackManager.tile coordinates;
 	[Range(-2,2)]
 	public int directionDelta = 0;
-	public bool fadeStart = true;
+	[HideInInspector]public bool fadeStart = true;
 	
 
 	void Start(){

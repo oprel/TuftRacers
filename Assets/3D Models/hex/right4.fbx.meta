@@ -1,21 +1,16 @@
 fileFormatVersion: 2
 guid: 3cedab2f047b8174c840cbf47b551cdc
-timeCreated: 1529359485
+timeCreated: 1531062561
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: pasted__pCylinder17
-    100002: //RootNode
-    400000: pasted__pCylinder17
-    400002: //RootNode
+    100000: //RootNode
+    400000: //RootNode
     2100000: lambert1
-    2300000: pasted__pCylinder17
-    2300002: //RootNode
-    3300000: pasted__pCylinder17
-    3300002: //RootNode
-    4300000: pasted__pCylinder17
-    4300002: right4
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: right4
   externalObjects: {}
   materials:
     importMaterials: 1

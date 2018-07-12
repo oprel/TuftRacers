@@ -16,6 +16,7 @@ public class carController : MonoBehaviour {
     public int wins;
     public int order;
     public GameObject lastCheckpoint;
+    public GameObject killParticles;
 
     public delegate void Action();
     public event Action ResetAll = delegate{ };
@@ -130,6 +131,7 @@ public class carController : MonoBehaviour {
     }
 
     public void Reset(){
+        Instantiate(killParticles,transform.position,Quaternion.identity);
         if (!lastCheckpoint) {
             gameObject.SetActive(false);
             carManager.carsInPlay--;

@@ -7,6 +7,7 @@ public class trackManager : MonoBehaviour {
 
 	public static trackManager self;
 	public static List<GameObject> checkpoints = new List<GameObject>();
+	public bool autoBuild = true;
 
 	static int gridSize = 50;
 	public static Vector3[,] grid = new Vector3[gridSize,gridSize];
@@ -30,7 +31,8 @@ public class trackManager : MonoBehaviour {
     private Vector2 hexSize = new Vector2(hexScale,hexScale*Mathf.Sqrt(3)/2);
     public float gap = 0.0f;
 
-	public int maxTiles;
+	public int tilesBehind;
+	public int tilesAhead;
 
 	public GameObject finishPrefab;
 	private GameObject finishTile;
@@ -50,7 +52,7 @@ public class trackManager : MonoBehaviour {
 
 
 
-	void Awake()
+	void Start()
     {
 		if (!finishTile) finishTile = Instantiate(finishPrefab);
 		self = this;
@@ -86,7 +88,7 @@ public class trackManager : MonoBehaviour {
 
 	IEnumerator TileCulling(){
 		cullTile = carManager.leadTile;
-		int i = tileHistory.IndexOf(cullTile) - maxTiles;
+		int i = tileHistory.IndexOf(cullTile) - tilesBehind;
 		if (i>0){
 			while (i>0){
 				i--;
@@ -164,7 +166,7 @@ public class trackManager : MonoBehaviour {
 		foreach (checkpoint p in c){
 			addCheckpoint(p.gameObject,o);
 		}
-		
+		supportBuilder.buildSupports(grid[cursor.x,cursor.y],direction,o);
 		MoveCursor(direction);
 
 	}
@@ -173,12 +175,13 @@ public class trackManager : MonoBehaviour {
 		foreach (GameObject o in tileHistory){
 			Destroy(o);
 		}
-		grid = new Vector3[gridSize,gridSize];
+		supportBuilder.Clear();
+		grid 		= new Vector3[gridSize,gridSize];
 		placedTiles = new GameObject[gridSize,gridSize];
-		cursor = new tile(gridSize/2,gridSize/2);
+		cursor 		= new tile(gridSize/2,gridSize/2);
 		tileHistory.Clear();
 		checkpoints.Clear();
-		Awake();
+		Start();
 		
 	}
 
@@ -267,6 +270,14 @@ public class trackManager : MonoBehaviour {
 
 	bool outOfBounds(){
 		return (cursor.x<0 || cursor.y<0 || cursor.x>gridSize-1 || cursor.y>gridSize-1);
+	}
+
+	public static void checkpointBuild(GameObject tile){
+		if (!self.autoBuild) return;
+		for (int i = 1; i < self.tilesAhead; i++)
+		{
+			if (tileHistory[tileHistory.Count - i] == tile) self.AutoTile();
+		}
 	}
 
 	void OnDrawGizmos() {
