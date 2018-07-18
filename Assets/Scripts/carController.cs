@@ -84,6 +84,9 @@ public class carController : MonoBehaviour {
     void OnTriggerEnter(Collider other){
         if (other.tag == "destroy" && gameManager.ending == null){
             Reset();
+            if (other.gameObject.layer == 9){
+                //UIManager.self.showText("MURDER");
+            }
         }
             
     }

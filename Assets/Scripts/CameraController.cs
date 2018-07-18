@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CameraController : MonoBehaviour {
 
 
 	public float DISTANCE_MARGIN = 1.0f;
 	private float distanceBetweenPlayers;
-	private float cameraDistance;
+	public float cameraDistance;
 	private float aspectRatio;
 	private float tanFov;
 	private float magicZ = 1000000;
@@ -38,5 +39,9 @@ public class CameraController : MonoBehaviour {
 		// Set camera to new position.
 		Vector3 dir = transform.rotation * (Camera.main.transform.position - carManager.averagePos).normalized;
 		Camera.main.transform.position = carManager.averagePos + dir * (cameraDistance + DISTANCE_MARGIN);
+	}
+
+	public float heightDiff(){
+		return transform.position.y-carManager.averagePos.y;
 	}
 }

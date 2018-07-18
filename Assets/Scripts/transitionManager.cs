@@ -72,8 +72,11 @@ public class transitionManager : MonoBehaviour {
 			yield return StartCoroutine(colorLerp(fadeColors[i-1],fadeColors[i],speed,Renderer));
 		}
 		yield return StartCoroutine(colorLerp(fadeColors[fadeColors.Length-1],sourceMaterial.color,speed,Renderer));
-		Renderer.material = sourceMaterial;
+		
 		pulseList.Remove(obj);
+		if (!Renderer) yield break;
+		Renderer.material = sourceMaterial;
+		
 	}
 
 	public IEnumerator colorLerp(Color a, Color b, float speed, Renderer Renderer){

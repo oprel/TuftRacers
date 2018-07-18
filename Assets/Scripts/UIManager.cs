@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour {
 	public void showText(string text){
 		centerDisplay.enabled=true;
 		centerDisplay.text = text;
-		centerDisplay.color = Random.ColorHSV();
+		centerDisplay.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
 		StartCoroutine(HideText(centerDisplay,2));
 	}
 

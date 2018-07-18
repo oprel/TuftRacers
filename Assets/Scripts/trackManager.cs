@@ -51,11 +51,14 @@ public class trackManager : MonoBehaviour {
 	}
 
 
+	private void Awake() {
+		self = this;
+	}
 
-	void Start()
+	private void Start()
     {
 		if (!finishTile) finishTile = Instantiate(finishPrefab);
-		self = this;
+		
 		foreach (GameObject c in checkpoints){
 			Destroy(c);
 		}

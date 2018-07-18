@@ -106,7 +106,7 @@ namespace Supyrb.EditorTools
         //Apply    
         private static void ApplyToSelectedPrefabs(GameObject go)
         {
-            var prefabAsset = PrefabUtility.GetPrefabParent(go);
+            var prefabAsset = PrefabUtility.GetCorrespondingObjectFromSource(go);
             if (prefabAsset == null)
             {
                 return;

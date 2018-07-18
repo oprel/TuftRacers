@@ -11,7 +11,7 @@ public class carAI : MonoBehaviour {
 	public float gas = .5f;
 
 	// Use this for initialization
-	void Awake () {
+	void Start () {
 		carController = GetComponent<carController>();
 		GetComponent<Renderer>().material = AIColor;
 		gas = gameManager.self.aiGas;
@@ -30,7 +30,7 @@ public class carAI : MonoBehaviour {
 	}
 
 	public void setNextTarget(Transform t){
-		if (!t) return;
+		if (!t || !carController) return;
 		nextCheckpoint = t.position;
 		nextCheckpoint += carController.carOffset(t);
 	}
