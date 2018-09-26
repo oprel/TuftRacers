@@ -33,7 +33,7 @@ public class supportBuilder : MonoBehaviour {
 			supportLocations.Add(corner);
 			obj = Instantiate(self.supportPrefab, self.transform);
 			obj.transform.position = corner;
-			
+			obj.transform.SetParent(o.transform);
 			placedSupports.Add(obj);
 		}
 		

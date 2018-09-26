@@ -95,7 +95,13 @@ public class trackManager : MonoBehaviour {
 		if (i>0){
 			while (i>0){
 				i--;
-				transitionManager.fadeOut(tileHistory[0],3);
+				GameObject t = tileHistory[0];
+				transitionManager.fadeOut(tileHistory[0],4);
+				foreach (supportDrop support in t.GetComponentsInChildren<supportDrop>()){
+					support.Drop(t.transform.position);
+				}
+				//t.GetComponent<MeshCollider>().enabled = false;
+				//tileHistory[0].AddComponent<Rigidbody>();
 				tileHistory.RemoveAt(0);
 				yield return new WaitForSeconds(1);
 			}

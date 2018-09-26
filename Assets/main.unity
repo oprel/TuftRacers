@@ -127,6 +127,7 @@ GameObject:
   - component: {fileID: 255537627}
   - component: {fileID: 255537629}
   - component: {fileID: 255537628}
+  - component: {fileID: 255537630}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -156,8 +157,8 @@ Camera:
   m_GameObject: {fileID: 255537622}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.62352943, g: 0.70980394, b: 0.7607844, a: 0}
+  m_ClearFlags: 3
+  m_BackGroundColor: {r: 0, g: 0.088948786, b: 0.14150941, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -286,6 +287,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   volume: {fileID: 1583868383}
   depthOffset: 1.2
+--- !u!114 &255537630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 255537622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58de132c6f28e1e47ac02a101f7a6d67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: f8b8c38c38c8c2f4785e95824e1132d6, type: 2}
 --- !u!1 &529690327
 GameObject:
   m_ObjectHideFlags: 0
@@ -813,7 +826,7 @@ Terrain:
   m_MaterialTemplate: {fileID: 2100000, guid: ffe60d3f93d743142b791d104d772c28, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
-  m_ScaleInLightmap: 0.0512
+  m_ScaleInLightmap: 7.69
   m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!4 &1372751076
 Transform:
@@ -5613,6 +5626,26 @@ Prefab:
       propertyPath: scoreDisplay
       value: 
       objectReference: {fileID: 529690329}
+    - target: {fileID: 114764701963054536, guid: 90607b0c482dc02468f5492622c77866,
+        type: 2}
+      propertyPath: fadeColors.Array.data[0].g
+      value: 0.031372547
+      objectReference: {fileID: 0}
+    - target: {fileID: 114764701963054536, guid: 90607b0c482dc02468f5492622c77866,
+        type: 2}
+      propertyPath: fadeColors.Array.data[0].b
+      value: 0.794034
+      objectReference: {fileID: 0}
+    - target: {fileID: 114764701963054536, guid: 90607b0c482dc02468f5492622c77866,
+        type: 2}
+      propertyPath: fadeColors.Array.data[1].g
+      value: 0.031372547
+      objectReference: {fileID: 0}
+    - target: {fileID: 114764701963054536, guid: 90607b0c482dc02468f5492622c77866,
+        type: 2}
+      propertyPath: fadeColors.Array.data[1].b
+      value: 0.85099137
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90607b0c482dc02468f5492622c77866, type: 2}
   m_IsPrefabAsset: 0
