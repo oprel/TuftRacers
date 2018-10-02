@@ -12,8 +12,8 @@ public class FruitPlacer : MonoBehaviour {
 	public float innerRadius;
 	public float rayHeight;
 	public int batchSize;
-	public bool facePlayer = true;
-	public float spherecastRadius;
+	public bool alignToRay = true;
+	public float spherecastRadius = 1;
 	
 	public GameObject[] objPrefabs;
 	public List<GameObject> allPlaced = new List<GameObject>();
@@ -43,18 +43,17 @@ public class FruitPlacer : MonoBehaviour {
 		Vector3 pos;
 		do{
 			pos = transform.position + Random.insideUnitSphere * outerRadius;
-			pos.y=0;
 		}while(Vector3.Distance(Vector3.zero,pos)<innerRadius);
-		pos+=transform.position;
-		pos.y=rayHeight;
 		RaycastHit hit;
-		if (Physics.Raycast(pos, -Vector3.up, out hit, 2*rayHeight))
+		//if (Physics.Raycast(pos, -Vector3.up, out hit, 2*rayHeight))
+        Debug.DrawLine(pos, transform.position);
+        if (Physics.SphereCast(pos, spherecastRadius, transform.position-pos, out hit, outerRadius))
         {
+            Debug.Log("PLACED FRUIT");
             GameObject obj = Instantiate(objPrefabs[Random.Range(0,objPrefabs.Length)],transform);
 			obj.transform.position=hit.point;
-			if (facePlayer){
-				Vector3 target = new Vector3(0,obj.transform.position.y,0);
-				obj.transform.LookAt(target);
+			if (alignToRay){
+				obj.transform.LookAt(pos);
 			}else{
 				obj.transform.rotation = Quaternion.Euler(0,Random.Range(0,360),0);
 			}

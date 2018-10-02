@@ -6,7 +6,6 @@ public class supportDrop : MonoBehaviour {
 public float force;
 
 	public void Drop(Vector3 pos){
-        Debug.Log("DROPPED");
         transform.SetParent(null);
         Rigidbody rb = gameObject.AddComponent<Rigidbody>();
         rb.AddForceAtPosition(force * Random.insideUnitSphere,pos);
