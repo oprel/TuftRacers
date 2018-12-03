@@ -50,9 +50,31 @@ public class trackManager : MonoBehaviour {
 		}
 	}
 
+	private void gridCollision(){
+		for (int i = 0; i<gridSize; i++){
+			for (int j = 0; j<gridSize; j++){
+				Vector3 pos = new Vector3(i*hexSize.x,0,j*hexSize.y);
+				if (j%2>0) pos.x += hexSize.x/2;
+				RaycastHit hit;
+				float l = 50;
+				//if (Physics.SphereCast(pos + l* Vector3.up, hexScale/4, Vector3.down, out hit, l)){
+				if (Physics.Raycast(pos + Vector3.up * l,transform.TransformDirection( Vector3.down), out hit,l)){
+					 Debug.DrawRay(pos + Vector3.up * l, Vector3.down * l, Color.green,20, false);
+					 
+					
+					 grid[i,j] = hit.point;
+					 if (Vector3.Distance(pos,hit.point)>1) grid[i,j] = Vector3.zero;
+				 }else{
+					 grid[i,j]=pos;
+				 }
+        
+			}
+		}
+	}
 
 	private void Awake() {
 		self = this;
+		
 	}
 
 	private void Start()
@@ -67,6 +89,7 @@ public class trackManager : MonoBehaviour {
 		
 		loadTiles();
 		CreateGrid();
+		gridCollision();
 		
 		for (int i = 0; i<5; i++){
 			AutoTile();
@@ -278,7 +301,7 @@ public class trackManager : MonoBehaviour {
 	}
 
 	bool outOfBounds(){
-		return (cursor.x<0 || cursor.y<0 || cursor.x>gridSize-1 || cursor.y>gridSize-1);
+		return (cursor.x<0 || cursor.y<0 || cursor.x>gridSize-1 || cursor.y>gridSize-1 || grid[cursor.x,cursor.y].magnitude==0);
 	}
 
 	public static void checkpointBuild(GameObject tile){
@@ -290,11 +313,12 @@ public class trackManager : MonoBehaviour {
 	}
 
 	void OnDrawGizmos() {
-		CreateGrid();
+		if (grid[0,0]==null)gridCollision();
+		
 
 		for (int i = 0; i<gridSize; i++){
 			for (int j = 0; j<gridSize; j++){
-				Gizmos.DrawWireSphere(grid[i,j],1);
+				Gizmos.DrawWireSphere(grid[i,j],hexScale/4);
 			}
 		}
 

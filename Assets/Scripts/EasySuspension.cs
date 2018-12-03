@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 [ExecuteInEditMode()]
 public class EasySuspension : MonoBehaviour {
 	[Range(0, 20)]
@@ -14,9 +15,14 @@ public class EasySuspension : MonoBehaviour {
 
 	public bool setSuspensionDistance = true;
 
+	private WheelCollider[] wheels;
+
+	private void Awake() {
+		wheels = GetComponentsInChildren<WheelCollider>();
+	}
 	void Update () {
 		// work out the stiffness and damper parameters based on the better spring model
-		foreach (WheelCollider wc in GetComponentsInChildren<WheelCollider>()) {
+		foreach (WheelCollider wc in wheels) {
 			JointSpring spring = wc.suspensionSpring;
 
 			spring.spring = Mathf.Pow(Mathf.Sqrt(wc.sprungMass) * naturalFrequency, 2);

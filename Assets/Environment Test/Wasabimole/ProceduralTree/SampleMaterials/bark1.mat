@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: bark1
-  m_Shader: {fileID: 4800000, guid: ff3b4a164d98da14fbac6e9dc19fce58, type: 3}
+  m_Shader: {fileID: 4800000, guid: 23e8f3568bd5d8f4a9ee55cda8257932, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -77,7 +77,8 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EnableExternalAlpha: 0
-    - _GeoRes: 41.25
+    - _GeoDistort: 0
+    - _GeoRes: -1.03
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
@@ -88,7 +89,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TexRes: 40
+    - _TexRes: 133.4
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:

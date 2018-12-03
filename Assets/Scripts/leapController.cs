@@ -11,6 +11,7 @@ public class leapController : MonoBehaviour {
 	public float gravityMod = 1;
 	public float leapCharge;
 	public float leapChargeRate;
+	public float landBoost = 1.2f;
 	public GameObject killbox;
 
 	public Image display;
@@ -72,6 +73,8 @@ public class leapController : MonoBehaviour {
 		gravityMod=baseGravityMod;
 		flying = false;
 		Instantiate(impactParticles,transform);
+		if (car.isGrounded())
+			Rigidbody.AddForce(transform.forward * Rigidbody.mass * landBoost);
 
 	}
 
