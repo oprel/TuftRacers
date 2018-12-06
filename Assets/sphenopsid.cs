@@ -6,8 +6,8 @@ public class sphenopsid : MonoBehaviour {
 	public bool respawn = false;
 	public GameObject jointPrefab;
 	public GameObject branchPrefab;
-	public float heightOffset = 4;
-	public float radiusOffset = 1;
+	private float heightOffset = 4.5f;
+	private float radiusOffset = 1;
 	public int jointAmount = 10;
 	public float bendAmount = 5;
 	private List<GameObject> joints = new List<GameObject>();
@@ -80,4 +80,15 @@ public class sphenopsid : MonoBehaviour {
 		Destroy(o);
 	}
 
+	private void OnDrawGizmos() {
+		Gizmos.color = Color.green;
+		float h = 0;
+		for (int i = 0; i < jointAmount; i++)
+		{
+			h+=1-(float)i/jointAmount;
+			Gizmos.DrawWireSphere(transform.position + new Vector3(0,h*heightOffset,0),radiusOffset);
+		}
+		
+
+	}
 }
