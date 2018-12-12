@@ -133,9 +133,9 @@ public class carController : MonoBehaviour {
         }
     }
 
-    public void Reset(){
+    public void Reset(bool kill = false){
         Instantiate(killParticles,transform.position,Quaternion.identity);
-        if (!lastCheckpoint) {
+        if (!lastCheckpoint || kill) {
             gameObject.SetActive(false);
             carManager.carsInPlay--;
             return;

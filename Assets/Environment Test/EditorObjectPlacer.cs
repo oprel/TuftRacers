@@ -41,7 +41,7 @@ public class EditorObjectPlacer : MonoBehaviour {
 	public void PlaceObj(){
 		Vector3 pos;
 		do{
-			pos = transform.position + Random.insideUnitSphere * outerRadius;
+			pos = Random.insideUnitSphere * outerRadius *transform.lossyScale.x;
 			pos.y=0;
 		}while(Vector3.Distance(Vector3.zero,pos)<innerRadius);
 		pos+=transform.position;
@@ -65,10 +65,10 @@ public class EditorObjectPlacer : MonoBehaviour {
 	}
 
 	void OnDrawGizmosSelected(){
-		Gizmos.DrawWireSphere(transform.position,outerRadius);
+		Gizmos.DrawWireSphere(transform.position,outerRadius*transform.lossyScale.x);
 		Vector3 circ = transform.position;
 		//circ.y=rayHeight;
 		Gizmos.color=Color.red;
-		Gizmos.DrawWireSphere(transform.position,innerRadius);
+		Gizmos.DrawWireSphere(transform.position,innerRadius*transform.lossyScale.x);
 	}
 }

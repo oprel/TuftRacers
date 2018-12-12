@@ -6,6 +6,13 @@ using UnityEngine.SceneManagement;
 public class gameManager : MonoBehaviour {
 
 	public static gameManager self;
+	public enum gameTypes
+	{
+		TRACKCULLING,
+		MONSTERCULLING,
+		INFINITE
+	}
+	public gameTypes gameType;
 	public int roundsToWin;
 	public GameObject carPrefab;
 	public int carAmount;
@@ -20,6 +27,7 @@ public class gameManager : MonoBehaviour {
 
 	void Awake(){
 		self = this;
+		SceneManager.LoadSceneAsync("env",LoadSceneMode.Additive);
 	}
 
 	void Start(){
@@ -87,6 +95,7 @@ public class gameManager : MonoBehaviour {
 		trackManager.self.Clear();
 		carManager.Reset();
 		UIManager.updateScoreDisplay();
+		if (self.gameType == gameTypes.MONSTERCULLING) monsterManager.newRound();
 
 	}
 

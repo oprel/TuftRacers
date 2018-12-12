@@ -7,7 +7,8 @@ public class trackManager : MonoBehaviour {
 
 	public static trackManager self;
 	public static List<GameObject> checkpoints = new List<GameObject>();
-	public bool autoBuild = true;
+	public static bool autoBuild = true;
+	public static bool cullTrack;
 
 	static int gridSize = 50;
 	public static Vector3[,] grid = new Vector3[gridSize,gridSize];
@@ -35,7 +36,8 @@ public class trackManager : MonoBehaviour {
 	public int tilesAhead;
 
 	public GameObject finishPrefab;
-	private GameObject finishTile;
+	[HideInInspector]
+	public GameObject finishTile;
 	private GameObject cullTile;
 
 	private int update;
@@ -53,23 +55,28 @@ public class trackManager : MonoBehaviour {
 	private void gridCollision(){
 		for (int i = 0; i<gridSize; i++){
 			for (int j = 0; j<gridSize; j++){
-				Vector3 pos = new Vector3(i*hexSize.x,0,j*hexSize.y);
-				if (j%2>0) pos.x += hexSize.x/2;
+				Vector3 center = new Vector3(i*hexSize.x,0,j*hexSize.y);
+				if (j%2>0) center.x += hexSize.x/2;
+				grid[i,j]=center;
+				int amount = 8;
 				RaycastHit hit;
-				float l = 50;
-				//if (Physics.SphereCast(pos + l* Vector3.up, hexScale/4, Vector3.down, out hit, l)){
-				if (Physics.Raycast(pos + Vector3.up * l,transform.TransformDirection( Vector3.down), out hit,l)){
-					 Debug.DrawRay(pos + Vector3.up * l, Vector3.down * l, Color.green,20, false);
-					 
+					float l = 50;
+				for (int t = 0; t < amount; t++)
+				{
+					float tt = (float)t/amount * Mathf.PI * 2;
+					Vector3 pos = center + new Vector3(Mathf.Sin(tt),0,Mathf.Cos(tt)) * hexScale/4;
 					
-					 grid[i,j] = hit.point;
-					 if (Vector3.Distance(pos,hit.point)>1) grid[i,j] = Vector3.zero;
-				 }else{
-					 grid[i,j]=pos;
-				 }
+					//if (Physics.SphereCast(pos + l* Vector3.up, hexScale/4, Vector3.down, out hit, l)){
+					if (Physics.Raycast(pos + Vector3.up * l,transform.TransformDirection( Vector3.down), out hit,l)){
+						Debug.DrawRay(pos + Vector3.up * l, Vector3.down * l, Color.green,20, false);
+						if (Vector3.Distance(pos,hit.point)>1) grid[i,j] = Vector3.zero;
+					}
+				}
+				
         
 			}
 		}
+		//OnDrawGizmos();
 	}
 
 	private void Awake() {
@@ -88,13 +95,17 @@ public class trackManager : MonoBehaviour {
 		
 		
 		loadTiles();
-		CreateGrid();
+		//CreateGrid();
 		gridCollision();
-		
+		if (grid[cursor.x,cursor.y].magnitude<0) do{
+			cursor = new tile(Random.Range(0,gridSize),Random.Range(0,gridSize));
+		}while(grid[cursor.x,cursor.y].magnitude<0);
+
 		for (int i = 0; i<5; i++){
 			AutoTile();
 			tileHistory[i].GetComponent<trackTile>().fadeStart=false;
 		}
+		cullTrack = gameManager.self.gameType == gameManager.gameTypes.TRACKCULLING;
 	
     }
 
@@ -107,8 +118,7 @@ public class trackManager : MonoBehaviour {
 	}
 	void FixedUpdate(){
 		update++;
-		finishTile.transform.position = grid[cursor.x,cursor.y];
-		if (cullTile != carManager.leadTile) StartCoroutine(TileCulling());
+		if (cullTrack && cullTile != carManager.leadTile) StartCoroutine(TileCulling());
 		
 	}
 
@@ -140,6 +150,7 @@ public class trackManager : MonoBehaviour {
 
 
 	void CreateGrid(){
+		//old use gridcollision instead
 		for (int i = 0; i<gridSize; i++){
 			for (int j = 0; j<gridSize; j++){
 				grid[i,j] = new Vector3(i*hexSize.x,0,j*hexSize.y);
@@ -184,10 +195,16 @@ public class trackManager : MonoBehaviour {
 		CreateTile(GetRandomTile(d));
 	}
 
-
+	void resetGridCell(){
+		grid[cursor.x,cursor.y] = new Vector3(cursor.x*hexSize.x,0,cursor.y*hexSize.y);
+		if (cursor.y%2>0) grid[cursor.x,cursor.y].x += hexSize.x/2;
+	}
 	void CreateTile(GameObject obj){
-		
+		if (grid[cursor.x,cursor.y].magnitude<1){
+			resetGridCell();
+		}
 		GameObject o = Instantiate(obj,grid[cursor.x,cursor.y],Quaternion.Euler(0,120+direction*60,0), transform);
+		//Debug.Log(grid[cursor.x,cursor.y]);
 		placedTiles[cursor.x,cursor.y] = o;
 		tileHistory.Add(o);
 		o.name = "track " + cursor.x + ":" +cursor.y + " D:" + direction + " (" + obj.name +")";
@@ -199,8 +216,11 @@ public class trackManager : MonoBehaviour {
 			addCheckpoint(p.gameObject,o);
 		}
 		supportBuilder.buildSupports(grid[cursor.x,cursor.y],direction,o);
+		
 		MoveCursor(direction);
-
+		finishTile.transform.position = grid[cursor.x,cursor.y];
+		finishTile.transform.rotation = Quaternion.Euler(0,120+direction*60,0);
+		
 	}
 
 	public void Clear(){
@@ -305,7 +325,7 @@ public class trackManager : MonoBehaviour {
 	}
 
 	public static void checkpointBuild(GameObject tile){
-		if (!self.autoBuild) return;
+		if (!autoBuild) return;
 		for (int i = 1; i < self.tilesAhead; i++)
 		{
 			if (tileHistory[tileHistory.Count - i] == tile) self.AutoTile();
@@ -313,8 +333,8 @@ public class trackManager : MonoBehaviour {
 	}
 
 	void OnDrawGizmos() {
-		if (grid[0,0]==null)gridCollision();
-		
+		//if (grid[0,0]==null)gridCollision();
+		if (grid[0,0]==null)CreateGrid();
 
 		for (int i = 0; i<gridSize; i++){
 			for (int j = 0; j<gridSize; j++){

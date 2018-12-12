@@ -3,9 +3,9 @@ guid: 02ac504a1e166c7418a079f825919ab4
 TextureImporter:
   fileIDToRecycleName: {}
   externalObjects: {}
-  serializedVersion: 6
+  serializedVersion: 7
   mipmaps:
-    mipMapMode: 0
+    mipMapMode: 1
     enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
@@ -32,10 +32,10 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
+    aniso: 2
     mipBias: -100
-    wrapU: 1
-    wrapV: 1
+    wrapU: -1
+    wrapV: -1
     wrapW: -1
   nPOTScale: 0
   lightmap: 0
@@ -51,7 +51,7 @@ TextureImporter:
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 8
+  textureType: 0
   textureShape: 1
   singleChannelComponent: 0
   maxTextureSizeSet: 0
@@ -86,12 +86,14 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: d8f5f40b41359944087cda8875f7a0cb
     vertices: []
     indices: 
     edges: []
     weights: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

@@ -44,8 +44,8 @@ public class sphenopsid : MonoBehaviour {
 			o.transform.position = pos;
 			o.transform.rotation = rot;
 			o.transform.localScale *= scale;
-			scale = 1-(float)i/jointAmount;
-			pos += rot * transform.up * heightOffset * scale;
+			scale = (1-(float)i/jointAmount);
+			pos += rot * transform.up * heightOffset * scale * transform.lossyScale.y;
 			rot *= Quaternion.Euler(Random.Range(-bendAmount,bendAmount),Random.value*360, Random.Range(-bendAmount,bendAmount));
 
 			spawnBranches(o.transform, (jointAmount-i)+Random.Range(0,5));
@@ -80,13 +80,13 @@ public class sphenopsid : MonoBehaviour {
 		Destroy(o);
 	}
 
-	private void OnDrawGizmos() {
+	private void OnDrawGizmosSelected() {
 		Gizmos.color = Color.green;
 		float h = 0;
 		for (int i = 0; i < jointAmount; i++)
 		{
 			h+=1-(float)i/jointAmount;
-			Gizmos.DrawWireSphere(transform.position + new Vector3(0,h*heightOffset,0),radiusOffset);
+			Gizmos.DrawWireSphere(transform.position + new Vector3(0,h*heightOffset*transform.lossyScale.y,0),radiusOffset*transform.lossyScale.x);
 		}
 		
 

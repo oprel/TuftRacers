@@ -6,11 +6,12 @@ public class monsterController : MonoBehaviour {
 
 	public Transform target;
 	public float speed;
-	[Range(0,1)]
+	[Range(0,.2f)]
 	public float rotationSpeed;
-	public Transform goal;
+	
 	public float dist;
-	public float goalRadius;
+	public Transform avoid;
+	public float avoidRadius;
 	
 	// Use this for initialization
 	void Start () {
@@ -24,26 +25,29 @@ public class monsterController : MonoBehaviour {
 			float distance = Mathf.Infinity;
 			foreach (carController car in carManager.cars){
 				float d = Vector3.Distance(transform.position,car.transform.position);
-				//get closest
-				if (d<distance){
-					//ignore if behind goal
-					float angle = Vector3.Angle(transform.position-car.transform.position,transform.position-goal.position);
-					if (!(d> Vector3.Distance(transform.position,goal.position) && angle<90)){
+				//get closest active car
+				if (car.isActiveAndEnabled && d<distance){
+					//ignore if behind avoid
+					float angle = Vector3.Angle(transform.position-car.transform.position,transform.position-avoid.position);
+					if (!(d> Vector3.Distance(transform.position,avoid.position) && angle<90)){
 						distance = d;
 						target = car.transform;
 					}
 				}
 			}
 		}
+		if (target){
 		//rotate
 		rotate(target.position, rotationSpeed);
-		dist = Vector3.Distance(transform.position,goal.transform.position);
-		rotate(transform.position-goal.transform.position,1-dist/goalRadius);
+		dist = Vector3.Distance(transform.position,avoid.transform.position);
+		rotate(transform.position-avoid.transform.position,1-dist/avoidRadius);
 		
 		//move
-		float s = Mathf.Clamp01(dist/goalRadius);
-		s += 10*(1-Mathf.Clamp01(2*dist/goalRadius-.1f));
+		float s = Mathf.Clamp01(dist/avoidRadius);
+		s += 10*(1-Mathf.Clamp01(2*dist/avoidRadius-.1f));
 		transform.position+=transform.forward*s*speed;
+		}
+		
 	}
 
 	void rotate(Vector3 target, float lerp){
@@ -57,7 +61,7 @@ public class monsterController : MonoBehaviour {
 	private void OnCollisionEnter(Collision other) {
 		carController car = other.gameObject.GetComponent<carController>();
 		if (car){
-			car.Reset();
+			car.Reset(true);
 		}
 	}
 }

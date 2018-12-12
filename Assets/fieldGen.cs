@@ -51,7 +51,7 @@ public class fieldGen : MonoBehaviour {
 			Vector2[] uvs = mesh.uv;
 			for (int i = 0; i < uvs.Length; i++)
 				{
-					uvs[i] = new Vector2(mesh.vertices[i].x%1 + mesh.normals[i].x, mesh.vertices[i].z%1+ mesh.normals[i].z);
+						uvs[i] = new Vector2(mesh.vertices[i].x-center.x, (mesh.vertices[i].y*mesh.normals[i].x + mesh.vertices[i].z*mesh.normals[i].y)-center.y); //magic
 				}
 			mesh.uv = uvs;
 			yield return null;
@@ -73,7 +73,7 @@ public class fieldGen : MonoBehaviour {
 	
 
 
-	private void OnDrawGizmos() {
+	private void OnDrawGizmosSelected() {
 		List<Vector3> grid = polarGrid();
 		foreach (Vector3 pos in grid){
 			Gizmos.DrawWireSphere(pos,.1f);

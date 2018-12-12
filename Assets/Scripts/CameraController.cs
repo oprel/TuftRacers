@@ -39,6 +39,7 @@ public class CameraController : MonoBehaviour {
 		// Set camera to new position.
 		Vector3 dir = transform.rotation * (Camera.main.transform.position - carManager.averagePos).normalized;
 		Camera.main.transform.position = carManager.averagePos + dir * (cameraDistance + DISTANCE_MARGIN);
+		Camera.main.nearClipPlane = cameraDistance/3;
 	}
 
 	public float heightDiff(){
