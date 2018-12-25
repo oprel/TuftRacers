@@ -34,13 +34,15 @@ namespace SimpleProceduralTerrainProject
         public int m_detailMapSize = 512; //Resolutions of detail (Grass) layers
          //Prototypes
         [Header("Prototype")]
-        public float m_splatTileSize0 = 10.0f;
-        public float m_splatTileSize1 = 2.0f;
-        public Texture2D m_splat0, m_splat1;
+        public Material customMaterial;
+        public float soilSize = 10.0f;
+        public float grassSize = 2.0f;
+        public Texture2D soilTexture, grassTexture;
         public detail detailMaster;
         [Range(0,5)] public float detailSpread = 2;
         public int detailBillboards = 0;
         public detail[] details;
+        public GameObject[] terrainTrees;
         public GameObject[] trees;
         //Tree settings
         public Vector2 m_treeScale = new Vector2(2,2);
@@ -60,7 +62,6 @@ namespace SimpleProceduralTerrainProject
         public Color m_wavingGrassTint = Color.white;
         public Color m_grassHealthyColor = Color.white;
         public Color m_grassDryColor = Color.white;
-
         //Private
         
         private FractalNoise noiseSmall, noiseBig, m_mountainNoise, m_treeNoise, m_detailNoise;
@@ -69,7 +70,10 @@ namespace SimpleProceduralTerrainProject
         private TreePrototype[] m_treeProtoTypes;
         private DetailPrototype[] m_detailProtoTypes;
         private Vector2 m_offset;
-
+        public float radial;
+        public float radialFalloff;
+        public Vector2 underlaySize;
+        
         private void Update() {
             for (int i = 0; i < details.Length; i++)
             {
@@ -115,6 +119,25 @@ namespace SimpleProceduralTerrainProject
             m_offset = new Vector2(-m_terrainSize * m_tilesX * 0.5f, -m_terrainSize * m_tilesZ * 0.5f);
 
             CreateProtoTypes();
+            //underlay
+            TerrainData terrainData = new TerrainData();
+            terrainData.heightmapResolution = m_heightMapSize;
+            terrainData.SetHeights(0, 0, new float[0,0]);
+            terrainData.size = new Vector3(underlaySize.x, m_terrainHeight, underlaySize.y);
+            terrainData.splatPrototypes = m_splatPrototypes;
+            terrainData.treePrototypes = m_treeProtoTypes;
+            terrainData.detailPrototypes = m_detailProtoTypes;
+            addTextures(terrainData);
+            GameObject o = Terrain.CreateTerrainGameObject(terrainData);
+            o.name = "Underlay";
+            o.transform.parent = transform;
+            Terrain t = o.GetComponent<Terrain>();
+            t.materialType=Terrain.MaterialType.Custom;
+            t.materialTemplate = customMaterial;
+            t.transform.position = transform.position- new Vector3(underlaySize.x/2, 1, underlaySize.y/2);
+            FillDetailMap(t, -1,-1);
+            tiles.Add(o);
+
 
             for (int x = 0; x < m_tilesX; x++)
             {
@@ -122,7 +145,7 @@ namespace SimpleProceduralTerrainProject
                 {
                     FillHeights(htmap, x, z);
 
-                    TerrainData terrainData = new TerrainData();
+                    terrainData = new TerrainData();
 
                     terrainData.heightmapResolution = m_heightMapSize;
                     terrainData.SetHeights(0, 0, htmap);
@@ -132,12 +155,14 @@ namespace SimpleProceduralTerrainProject
                     terrainData.detailPrototypes = m_detailProtoTypes;
 
                     //FillAlphaMap(terrainData);
-                    addTextures(terrainData,m_splat0,m_splat1);
+                    addTextures(terrainData);
 
-                    GameObject o = Terrain.CreateTerrainGameObject(terrainData);
+                    o = Terrain.CreateTerrainGameObject(terrainData);
                     o.name = "TerrainTile "+x+"/"+z;
                     o.transform.parent = transform;
                     m_terrain[x, z] = o.GetComponent<Terrain>();
+                    m_terrain[x, z].materialType=Terrain.MaterialType.Custom;
+                    m_terrain[x, z].materialTemplate = customMaterial;
                     m_terrain[x, z].transform.position = transform.position+ new Vector3(m_terrainSize * x + m_offset.x, 0, m_terrainSize * z + m_offset.y);
                     m_terrain[x, z].heightmapPixelError = m_pixelMapError;
                     m_terrain[x, z].basemapDistance = m_baseMapDist;
@@ -149,9 +174,7 @@ namespace SimpleProceduralTerrainProject
 
                 }
             }
-
-
-
+            
             //Set the neighbours of terrain to remove seams.
             for (int x = 0; x < m_tilesX; x++)
             {
@@ -176,21 +199,13 @@ namespace SimpleProceduralTerrainProject
 
         void CreateProtoTypes()
         {
-            m_splatPrototypes = new SplatPrototype[2];
 
-            m_splatPrototypes[0] = new SplatPrototype();
-            m_splatPrototypes[0].texture = m_splat0;
-            m_splatPrototypes[0].tileSize = new Vector2(m_splatTileSize0, m_splatTileSize0);
-
-            m_splatPrototypes[1] = new SplatPrototype();
-            m_splatPrototypes[1].texture = m_splat1;
-            m_splatPrototypes[1].tileSize = new Vector2(m_splatTileSize1, m_splatTileSize1);
 
             m_treeProtoTypes = new TreePrototype[trees.Length];
             for (int i = 0; i < trees.Length; i++)
             {
-            m_treeProtoTypes[i] = new TreePrototype();
-            m_treeProtoTypes[i].prefab = trees[i];
+                m_treeProtoTypes[i] = new TreePrototype();
+                m_treeProtoTypes[i].prefab = trees[i];
             }
 
             m_detailProtoTypes = new DetailPrototype[details.Length];
@@ -228,10 +243,13 @@ namespace SimpleProceduralTerrainProject
                 {
                     float worldPosX = (x + tileX * (m_heightMapSize - 1)) * ratio;
                     float worldPosZ = (z + tileZ * (m_heightMapSize - 1)) * ratio;
-
+                    float distance = new Vector3(worldPosX-m_terrainSize * m_tilesX/2,0,worldPosZ-m_terrainSize * m_tilesZ/2).magnitude;
                     htmap[z, x] = noiseBig.Amplitude + noiseSmall.Sample2D(worldPosX, worldPosZ);
                     htmap[z, x] += noiseSmall.Amplitude + noiseSmall.Sample2D(worldPosX, worldPosZ);
+                    
+                    htmap[z, x] *= Mathf.Clamp01((radial-distance)/radialFalloff);
                 }
+
             }
         }
 
@@ -269,7 +287,7 @@ namespace SimpleProceduralTerrainProject
         void FillTreeInstances(Terrain terrain, int tileX, int tileZ)
         {
             Random.InitState(0);
-
+            Transform parent = terrain.transform;
             for (int x = 0; x < m_terrainSize; x += m_treeSpacing)
             {
                 for (int z = 0; z < m_terrainSize; z += m_treeSpacing)
@@ -292,7 +310,7 @@ namespace SimpleProceduralTerrainProject
 
                     float ht = terrain.terrainData.GetInterpolatedHeight(normX, normZ);
 
-                    if (frac < 0.5f && ht>waterLevel) //make sure tree are not on steep slopes
+                    if (frac < 0.5f) //make sure tree are not on steep slopes
                     {
                         float worldPosX = x + tileX * (m_terrainSize - 1);
                         float worldPosZ = z + tileZ * (m_terrainSize - 1);
@@ -300,16 +318,30 @@ namespace SimpleProceduralTerrainProject
                         float noise = m_treeNoise.Sample2D(worldPosX, worldPosZ);
                         if (noise > 0.0f && ht < m_terrainHeight * 0.4f)
                         {
+                            float distance = new Vector3(worldPosX-m_terrainSize * m_tilesX/2,0,worldPosZ-m_terrainSize * m_tilesZ/2).magnitude;
+                            if (distance<radial){
+                                if (Random.Range(0,trees.Length+terrainTrees.Length)<terrainTrees.Length){
 
-                            TreeInstance temp = new TreeInstance();
-                            temp.position = new Vector3(normX, ht, normZ);
-                            temp.prototypeIndex = Random.Range(0, trees.Length);
-                            temp.widthScale = m_treeScale.x;
-                            temp.heightScale = m_treeScale.y;
-                            temp.color = Color.white;
-                            temp.lightmapColor = Color.white;
+                            
+                                    TreeInstance temp = new TreeInstance();
+                                    temp.position = new Vector3(normX, ht-1, normZ);
+                                    temp.prototypeIndex = Random.Range(0, trees.Length);
+                                    temp.widthScale = m_treeScale.x;
+                                    temp.heightScale = m_treeScale.y;
+                                    temp.color = Color.white;
+                                    temp.lightmapColor = Color.white;
+                                    //temp.rotation = Random.value * 2 * Mathf.PI;
 
-                            terrain.AddTreeInstance(temp);
+                                    terrain.AddTreeInstance(temp);
+                                }else{
+                                        Transform o = Instantiate(trees[Random.Range(0,trees.Length)],parent).transform;
+                                        o.position += new Vector3(x+tileX/2, ht-1, z+tileZ/2);
+                                        o.parent = parent;
+                                        o.rotation = Quaternion.Euler(0,Random.value*360,0);
+
+                                }
+                            }
+                         
                         }
                     }
 
@@ -354,7 +386,7 @@ namespace SimpleProceduralTerrainProject
 
                     float ht = terrain.terrainData.GetInterpolatedHeight(normX, normZ);
 
-                    if (frac < 0.5f && ht>waterLevel)
+                    if (frac < 0.5f && (ht>waterLevel || tileX<0))
                     {
                         float worldPosX = (x + tileX * (m_detailMapSize - 1)) * ratio;
                         float worldPosZ = (z + tileZ * (m_detailMapSize - 1)) * ratio;
@@ -377,7 +409,6 @@ namespace SimpleProceduralTerrainProject
             terrain.detailObjectDensity = m_detailObjectDensity;
             terrain.detailObjectDistance = m_detailObjectDistance;
             terrain.terrainData.SetDetailResolution(m_detailMapSize, m_detailResolutionPerPatch);
-
             for (int i = 0; i < details.Length; i++)
             {
                 terrain.terrainData.SetDetailLayer(0, 0, i, getMap(detailMap,i));
@@ -397,45 +428,47 @@ namespace SimpleProceduralTerrainProject
         }
 
 
-    private void addTextures(TerrainData terrainData, Texture2D grassTexture, Texture2D rockTexture)
-    {
-        var grassSplat = new SplatPrototype();
-        var rockSplat = new SplatPrototype();
-
-        grassSplat.texture = grassTexture;
-        rockSplat.texture = rockTexture;
-
-        terrainData.splatPrototypes = new SplatPrototype[]
-            {
-                grassSplat,
-                rockSplat
-            };
-
-        terrainData.RefreshPrototypes();
-
-        var splatMap = new float[terrainData.alphamapResolution, terrainData.alphamapResolution, 2];
-
-        for (var zRes = 0; zRes < terrainData.alphamapHeight; zRes++)
+        private void addTextures(TerrainData terrainData)
         {
-            for (var xRes = 0; xRes < terrainData.alphamapWidth; xRes++)
+            var grassSplat = new SplatPrototype();
+            grassSplat.tileSize = new Vector2(grassSize, grassSize);
+            var rockSplat = new SplatPrototype();
+            rockSplat.tileSize = new Vector2(soilSize, soilSize);
+
+            grassSplat.texture = grassTexture;
+            rockSplat.texture = soilTexture;
+
+            terrainData.splatPrototypes = new SplatPrototype[]
+                {
+                    
+                    rockSplat,
+                    grassSplat
+                };
+
+            terrainData.RefreshPrototypes();
+
+            var splatMap = new float[terrainData.alphamapResolution, terrainData.alphamapResolution, 2];
+
+            for (var zRes = 0; zRes < terrainData.alphamapHeight; zRes++)
             {
-                var normalizedX = (float)xRes / (terrainData.alphamapWidth - 1);
-                var normalizedZ = (float)zRes / (terrainData.alphamapHeight - 1);
+                for (var xRes = 0; xRes < terrainData.alphamapWidth; xRes++)
+                {
+                    var normalizedX = (float)xRes / (terrainData.alphamapWidth - 1);
+                    var normalizedZ = (float)zRes / (terrainData.alphamapHeight - 1);
 
-                var steepness = terrainData.GetSteepness(normalizedX, normalizedZ);
-                var steepnessNormalized = 1f-steepness / 90f;
+                    var steepness = terrainData.GetSteepness(normalizedX, normalizedZ);
+                    var steepnessNormalized = 1f-steepness / 90f;
 
-                splatMap[zRes, xRes, 0] = 1f - steepnessNormalized;
+                    splatMap[zRes, xRes, 0] = 1f - steepnessNormalized;
 
-                float ht = terrainData.GetInterpolatedHeight(normalizedX, normalizedZ);
-                float range = Mathf.Clamp01((ht-waterLevel)/4);
-                splatMap[zRes, xRes, 0] += 1f- range * steepnessNormalized;
-                splatMap[zRes, xRes, 1] += range * steepnessNormalized;
-            }
+                    float ht = terrainData.GetInterpolatedHeight(normalizedX, normalizedZ);
+                    float range = Mathf.Clamp01((ht-waterLevel)/4);
+                    splatMap[zRes, xRes, 0] += 1f- range * steepnessNormalized;
+                    splatMap[zRes, xRes, 1] += range * steepnessNormalized;
+                }
+            }   
+            terrainData.SetAlphamaps(0, 0, splatMap);
         }
-            
-        terrainData.SetAlphamaps(0, 0, splatMap);
-    }
     }
 
     

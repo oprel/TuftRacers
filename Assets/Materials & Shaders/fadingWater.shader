@@ -24,6 +24,7 @@ Shader "Custom/fadingWater" {
 		sampler2D _NormalMap1;
 		sampler2D _NormalMap2;
 
+
 		struct Input {
 			float2 uv_NormalMap1;
 			float2 uv_NormalMap2;
@@ -61,8 +62,9 @@ Shader "Custom/fadingWater" {
 
 		o.pos = UnityObjectToClipPos(v.vertex);
 		//o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
-			fixed4 col = _Color;
+		fixed4 col = _Color;
 		float dist = distance(worldPos, _WorldSpaceCameraPos);
+		o.distance = dist;
 		//col.a = 1-saturate(dist / _Distance);
 		//o.color =col;
 			
@@ -95,8 +97,8 @@ Shader "Custom/fadingWater" {
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
 			//o.Alpha = 1;
-			float k = length(IN.distance);
-			o.Alpha = k/_Distance;
+
+			o.Alpha = IN.distance/_Distance   ;
 		}
 		ENDCG
 	}

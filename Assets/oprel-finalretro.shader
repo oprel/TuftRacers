@@ -10,7 +10,7 @@ Shader "oprel/finalretro" {
         
 	}
 		SubShader{
-			Tags { "RenderType" = "Opaque" }
+			Tags { "RenderType" = "Opaque" "Queue" = "Transparent" }
 			LOD 200
 
 			Pass {
@@ -19,6 +19,7 @@ Shader "oprel/finalretro" {
 
 					#pragma vertex vert
 					#pragma fragment frag
+					#pragma multi_compile_fog
 					#include "UnityCG.cginc"
 
 					struct v2f
@@ -28,6 +29,7 @@ Shader "oprel/finalretro" {
 						half4 colorFog : COLOR1;
 						float2 uv_MainTex : TEXCOORD0;
 						half3 normal : TEXCOORD1;
+						UNITY_FOG_COORDS(2)
 					};
 
 					float4 _MainTex_ST;
@@ -66,7 +68,7 @@ Shader "oprel/finalretro" {
 						o.uv_MainTex *= distance + (vertex.w*(UNITY_LIGHTMODEL_AMBIENT.a * 8)) / distance / 2;
 						o.normal = distance + (vertex.w*(UNITY_LIGHTMODEL_AMBIENT.a * 8)) / distance / 2;
 
-
+						UNITY_TRANSFER_FOG(o,o.pos);
 						return o;
 					}
 
@@ -76,6 +78,7 @@ Shader "oprel/finalretro" {
 					{
                         half2 uv = half2((int)(IN.uv_MainTex.x * _TexRes/ IN.normal.r) / _TexRes, (int)(IN.uv_MainTex.y*_TexRes/ IN.normal.r) /_TexRes);	
 						half4 color = tex2D(_MainTex, uv)*IN.color * _Color;
+						UNITY_APPLY_FOG(IN.fogCoord, color);
 						return color;
 					}
 				ENDCG

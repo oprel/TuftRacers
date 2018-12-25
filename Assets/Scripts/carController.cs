@@ -135,7 +135,7 @@ public class carController : MonoBehaviour {
 
     public void Reset(bool kill = false){
         Instantiate(killParticles,transform.position,Quaternion.identity);
-        if (!lastCheckpoint || kill) {
+        if ((!lastCheckpoint || kill) && gameManager.self.enabled) {
             gameObject.SetActive(false);
             carManager.carsInPlay--;
             return;
@@ -157,10 +157,12 @@ public class carController : MonoBehaviour {
             return;
         }
         
-        
-        Transform t = lastCheckpoint.transform;
-        transform.position = t.position + carOffset(t) + 5* Vector3.up;
-        transform.rotation = t.rotation;
+        if (lastCheckpoint){
+            Transform t = lastCheckpoint.transform;
+            transform.position = t.position + carOffset(t) + 5* Vector3.up;
+            transform.rotation = t.rotation;
+        }
+       
     }
 
     public IEnumerator resetWheels(){

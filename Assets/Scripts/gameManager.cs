@@ -27,7 +27,7 @@ public class gameManager : MonoBehaviour {
 
 	void Awake(){
 		self = this;
-		SceneManager.LoadSceneAsync("env",LoadSceneMode.Additive);
+		//SceneManager.LoadSceneAsync("env",LoadSceneMode.Additive);
 	}
 
 	void Start(){

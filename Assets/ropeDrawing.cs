@@ -23,7 +23,7 @@ How To Use:
 // Require a Rigidbody
 [RequireComponent (typeof (Rigidbody))]
 
-class ropeDrawing : MonoBehaviour
+public class ropeDrawing : MonoBehaviour
 {
 
 	public Transform target;

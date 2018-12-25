@@ -61,7 +61,7 @@ void surf (Input IN, inout SurfaceOutput o) {
     float dir = abs(IN.worldNormal.x);
     dir = floor(saturate(dir*_DetailSpread)*4.99f);
     fixed4 c =t[dir];
-
+    c = tex2D(_MainTex, IN.uv_MainTex);
     o.Albedo = c.rgb;
     o.Alpha = c.a;
     clip (o.Alpha - _Cutoff);

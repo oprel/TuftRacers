@@ -12,14 +12,26 @@ public class monsterController : MonoBehaviour {
 	public float dist;
 	public Transform avoid;
 	public float avoidRadius;
+	public float heightOffset;
+
+	private legPlacer[] legs;
 	
 	// Use this for initialization
 	void Start () {
-		
+		legs = GetComponentsInChildren<legPlacer>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		float h=0;
+		foreach (legPlacer leg in legs)
+		{
+			h+=leg.desiredHeight;
+		}
+		Vector3 pos = transform.position;
+		pos.y = Mathf.Lerp(pos.y,h/legs.Length+heightOffset,.1f);
+		transform.position = pos;
+
 		//get target
 		if (Random.value<.1f){
 			float distance = Mathf.Infinity;
