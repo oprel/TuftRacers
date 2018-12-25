@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class carAI : MonoBehaviour {
 
-	[HideInInspector]
+	//[HideInInspector]
 	public Vector3 nextCheckpoint;
 	public Material AIColor;
 	private carController carController;
@@ -13,7 +13,7 @@ public class carAI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		carController = GetComponent<carController>();
-		GetComponent<Renderer>().material = AIColor;
+		//GetComponent<Renderer>().material = AIColor;
 		gas = gameManager.self.aiGas;
 	}
 	

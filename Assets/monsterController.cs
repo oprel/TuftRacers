@@ -38,7 +38,7 @@ public class monsterController : MonoBehaviour {
 			foreach (carController car in carManager.cars){
 				float d = Vector3.Distance(transform.position,car.transform.position);
 				//get closest active car
-				if (car.isActiveAndEnabled && d<distance){
+				if (car.isActiveAndEnabled && d<distance && avoid){
 					//ignore if behind avoid
 					float angle = Vector3.Angle(transform.position-car.transform.position,transform.position-avoid.position);
 					if (!(d> Vector3.Distance(transform.position,avoid.position) && angle<90)){

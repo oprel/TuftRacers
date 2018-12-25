@@ -18,10 +18,12 @@ public class CameraFollower : MonoBehaviour {
 	private Camera cam;
 
 	void Start() {
+		if (!target) target = carManager.cars[0].transform;
 		aspectRatio = Screen.width / Screen.height;
 		tanFov = Mathf.Tan(Mathf.Deg2Rad * Camera.main.fieldOfView / 2.0f);
 		rb = target.GetComponent<Rigidbody>();
 		cam = GetComponent<Camera>();
+		
 	}
 
 	void Update () {

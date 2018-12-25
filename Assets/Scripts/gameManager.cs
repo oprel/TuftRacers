@@ -31,7 +31,8 @@ public class gameManager : MonoBehaviour {
 	}
 
 	void Start(){
-		openMenu();
+		//openMenu();
+		init();
 	}
 
 	public void init () {

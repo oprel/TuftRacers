@@ -17,7 +17,7 @@ public class monsterManager : MonoBehaviour {
 		self = this;
 	}
 	private void Update() {
-		if (!avoid) avoid = trackManager.self.finishTile.transform;
+		if (!avoid && trackManager.self.finishTile) avoid = trackManager.self.finishTile.transform;
 	}
 
 	public static void newRound(){

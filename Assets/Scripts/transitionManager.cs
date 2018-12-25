@@ -59,6 +59,7 @@ public class transitionManager : MonoBehaviour {
 		pulseList.Add(obj);
 
 		Renderer Renderer = obj.GetComponent<Renderer>();
+		if (!Renderer) yield break;
 		Material sourceMaterial = Renderer.material;
 		Renderer.material = transparentDummyMaterial(sourceMaterial);
 

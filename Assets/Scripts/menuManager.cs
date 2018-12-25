@@ -32,7 +32,7 @@ public class menuManager : MonoBehaviour {
 		gameManager.aiGas = diffSlider.i/10f;
 		HUD.SetActive(true);
 		SceneManager.UnloadSceneAsync("menu");
-		gameManager.self.init();
+		gameManager.init();
 	}
 
 
