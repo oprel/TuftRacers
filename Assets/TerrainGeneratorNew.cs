@@ -11,12 +11,12 @@ namespace SimpleProceduralTerrainProject
         public bool reset;
         public int m_seed = 0;
         private List<GameObject> tiles = new List<GameObject>();
-        
         //noise settings
         [Header("Terrain settings")]
         public float m_treeFrq = 0.005f;
         public float m_detailFrq = 0.01f;
         public float waterLevel;
+        public Vector2 detailNoise = new Vector2(3,1);
         public Vector4 groundSmall, groundBig = new Vector4(0.01f,5,1,.1f);
 
 
@@ -94,7 +94,16 @@ namespace SimpleProceduralTerrainProject
         [System.Serializable]
         public struct detail{
             public Texture2D texture;
-            public float minWidth,minHeight,maxWidth,maxHeight;
+            public Vector2 Height;
+            public Vector2 Width;
+            public float waterLevel;
+            [Range(0,1)]
+            public float spawnRate;
+            [HideInInspector]
+            public float weightIndex;
+            [HideInInspector]
+            public string name;
+            public bool everywhere;
         }
 
         public void Generate(){
@@ -102,7 +111,7 @@ namespace SimpleProceduralTerrainProject
             noiseBig = new FractalNoise(new PerlinNoise(m_seed, groundBig.x), Mathf.FloorToInt(groundBig.y),groundBig.z, groundBig.w);
             
             m_treeNoise = new FractalNoise(new PerlinNoise(m_seed + 1, m_treeFrq), 6, 1.0f);
-            m_detailNoise = new FractalNoise(new PerlinNoise(m_seed + 2, m_detailFrq), 6, 1.0f);
+            m_detailNoise = new FractalNoise(new PerlinNoise(m_seed + 2, m_detailFrq),Mathf.FloorToInt(detailNoise.x), detailNoise.y);
 
             m_heightMapSize = Mathf.ClosestPowerOfTwo(m_heightMapSize) + 1;
             m_alphaMapSize = Mathf.ClosestPowerOfTwo(m_alphaMapSize);
@@ -134,8 +143,7 @@ namespace SimpleProceduralTerrainProject
             Terrain t = o.GetComponent<Terrain>();
             t.materialType=Terrain.MaterialType.Custom;
             t.materialTemplate = customMaterial;
-            t.transform.position = transform.position- new Vector3(underlaySize.x/2, 1, underlaySize.y/2);
-            FillDetailMap(t, -1,-1);
+            t.transform.position = transform.position- new Vector3(underlaySize.x/2, 1000, underlaySize.y/2);
             tiles.Add(o);
 
 
@@ -201,11 +209,11 @@ namespace SimpleProceduralTerrainProject
         {
 
 
-            m_treeProtoTypes = new TreePrototype[trees.Length];
-            for (int i = 0; i < trees.Length; i++)
+            m_treeProtoTypes = new TreePrototype[terrainTrees.Length];
+            for (int i = 0; i < terrainTrees.Length; i++)
             {
                 m_treeProtoTypes[i] = new TreePrototype();
-                m_treeProtoTypes[i].prefab = trees[i];
+                m_treeProtoTypes[i].prefab = terrainTrees[i];
             }
 
             m_detailProtoTypes = new DetailPrototype[details.Length];
@@ -220,10 +228,10 @@ namespace SimpleProceduralTerrainProject
                 prot.renderMode = DetailRenderMode.Grass;
                 prot.healthyColor = m_grassHealthyColor;
                 prot.dryColor = m_grassDryColor;
-                prot.minHeight = details[i].minHeight + detailMaster.minHeight;
-                prot.minWidth = details[i].minWidth + detailMaster.minWidth;
-                prot.maxHeight = details[i].maxHeight + detailMaster.maxHeight;
-                prot.maxWidth = details[i].maxWidth + detailMaster.maxWidth;
+                prot.minHeight = details[i].Height.x + detailMaster.Height.x;
+                prot.maxHeight = details[i].Height.y + detailMaster.Height.y;
+                prot.minWidth = details[i].Width.x + detailMaster.Width.y;
+                prot.maxWidth = details[i].Width.x + detailMaster.Width.y;
                 if (i+detailBillboards-details.Length>=0) prot.renderMode = DetailRenderMode.GrassBillboard;
                 m_detailProtoTypes[i] = prot;
             }
@@ -359,24 +367,32 @@ namespace SimpleProceduralTerrainProject
         {
             //each layer is drawn separately so if you have a lot of layers your draw calls will increase 
             int[,,] detailMap = new int[details.Length,m_detailMapSize, m_detailMapSize];
-
             float ratio = (float)m_terrainSize / (float)m_detailMapSize;
 
-            Random.InitState(0);
+            
+            //set weightIndices
+            float detailSpread =0;
+            for (int i = 0; i < details.Length; i++)
+            {
+                detailSpread+=details[i].spawnRate;
+                details[i].weightIndex = detailSpread;
+                details[i].name = details[i].texture.name;
+            }
 
+            Random.InitState(0);
             for (int x = 0; x < m_detailMapSize; x++)
             {
                 for (int z = 0; z < m_detailMapSize; z++)
                 {
-                    for (int i = 0; i < details.Length; i++)
-                    {
-                      detailMap[i,z,x] = 0;  
-                    }
+
                     float unit = 1.0f / (m_detailMapSize - 1);
 
                     float normX = x * unit;
                     float normZ = z * unit;
-
+                    for (int i = 0; i < details.Length; i++)
+                    {
+                      detailMap[i,x,z] = 0;  
+                    }
                     // Get the steepness value at the normalized coordinate.
                     float angle = terrain.terrainData.GetSteepness(normX, normZ);
 
@@ -385,17 +401,26 @@ namespace SimpleProceduralTerrainProject
                     float frac = angle / 90.0f;
 
                     float ht = terrain.terrainData.GetInterpolatedHeight(normX, normZ);
-
-                    if (frac < 0.5f && (ht>waterLevel || tileX<0))
+                    float ran = Random.value * detailSpread;
+                    int detailID = 0;
+                    for (int i = 0; i < details.Length; i++)
+                    {
+                        if (ran<=details[i].weightIndex){
+                            detailID = i;
+                            break;
+                        }
+                    }
+                    
+                    if (frac < 0.5f && (ht>waterLevel + details[detailID].waterLevel || tileX<0))
                     {
                         float worldPosX = (x + tileX * (m_detailMapSize - 1)) * ratio;
                         float worldPosZ = (z + tileZ * (m_detailMapSize - 1)) * ratio;
 
                         float noise = m_detailNoise.Sample2D(worldPosX, worldPosZ);
 
-                        if (noise > 0.0f)
+                        if (noise > 0.0f || details[detailID].everywhere)
                         {
-                            detailMap[Random.Range(0,details.Length),x,z] = 1;
+                            detailMap[detailID,x,z] = 1;
                         }
                     }
 

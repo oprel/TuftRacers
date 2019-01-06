@@ -31,6 +31,7 @@ public class carController : MonoBehaviour {
     private WheelCollider[] wheels;
     private AudioSource AudioSource;
     private float previousMotor;
+    private Vector3 spawnPos;
 
 
 
@@ -42,6 +43,7 @@ public class carController : MonoBehaviour {
         wheels = GetComponentsInChildren<WheelCollider>();
         AudioSource = GetComponent<AudioSource>();
         carAI = GetComponent<carAI>();
+        spawnPos = transform.position;
         
         
 	 }
@@ -162,7 +164,7 @@ public class carController : MonoBehaviour {
             transform.position = t.position + carOffset(t) + 5* Vector3.up;
             transform.rotation = t.rotation;
         }else{
-            transform.position = Vector3.zero;
+            transform.position = spawnPos;
             transform.rotation = Quaternion.identity;
         }
        

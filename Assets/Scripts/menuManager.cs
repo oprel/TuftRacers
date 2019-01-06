@@ -15,8 +15,10 @@ public class menuManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		gameManager = gameManager.self;
-		HUD = UIManager.self.HUD;
-		HUD.SetActive(false);
+		//HUD = UIManager.self.HUD;
+		//HUD.SetActive(false);
+		StartCoroutine(loadScene("terrainSmall"));
+		
 	}
 
 	void FixedUpdate(){
@@ -32,7 +34,18 @@ public class menuManager : MonoBehaviour {
 		gameManager.aiGas = diffSlider.i/10f;
 		HUD.SetActive(true);
 		SceneManager.UnloadSceneAsync("menu");
-		gameManager.init();
+		gameManager.newRound();
+	}
+
+	IEnumerator loadScene(string name){
+		
+		SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+		Scene scene = SceneManager.GetSceneByName(name);
+		do{
+			yield return null;
+		}while(!scene.isLoaded);
+		
+		SceneManager.SetActiveScene(scene);
 	}
 
 

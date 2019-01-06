@@ -82,10 +82,10 @@ public class trackManager : MonoBehaviour {
 	private void Awake() {
 		self = this;
 		
+		
 	}
 
-	private void Start()
-    {
+	public void init(){
 		if (!finishTile) finishTile = Instantiate(finishPrefab);
 		
 		foreach (GameObject c in checkpoints){
@@ -106,8 +106,7 @@ public class trackManager : MonoBehaviour {
 			tileHistory[i].GetComponent<trackTile>().fadeStart=false;
 		}
 		cullTrack = gameManager.self.gameType == gameManager.gameTypes.TRACKCULLING;
-	
-    }
+	}
 
 	void loadTiles(){
 		for (int i =0; i<5;i++){tileObjs.Add(new List<GameObject>());};
@@ -230,11 +229,9 @@ public class trackManager : MonoBehaviour {
 		supportBuilder.Clear();
 		grid 		= new Vector3[gridSize,gridSize];
 		placedTiles = new GameObject[gridSize,gridSize];
-		cursor 		= new tile(gridSize/2,gridSize/2);
+		//cursor 		= new tile(gridSize/2,gridSize/2);
 		tileHistory.Clear();
 		checkpoints.Clear();
-		Start();
-		
 	}
 
 	GameObject GetRandomTile(int d){
@@ -364,6 +361,20 @@ public class trackManager : MonoBehaviour {
 			}  
         }
     }
+
+	public static void setStart(Vector3 point){
+		self.gridCollision();
+		float distance = Mathf.Infinity;
+		for (int i = 0; i<gridSize; i++){
+			for (int j = 0; j<gridSize; j++){
+				float d = Vector3.Distance(grid[i,j],point);
+				if (grid[i,j].magnitude>0 && d<distance){
+					self.cursor = new tile(i,j);
+					distance = d;
+				}
+			}	
+		}
+	}
 
 	public static int mod(int x, int m) {
 		int r = x%m;

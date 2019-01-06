@@ -62,6 +62,8 @@ public class carManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+		
+		if (roamManager.roaming) return;
 		if (playerInLead && carsInPlay<2){
 			gameManager.Winner(playerInLead);
 		}

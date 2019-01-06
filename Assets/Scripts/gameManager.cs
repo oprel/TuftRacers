@@ -27,27 +27,20 @@ public class gameManager : MonoBehaviour {
 
 	void Awake(){
 		self = this;
-		//SceneManager.LoadSceneAsync("env",LoadSceneMode.Additive);
+		//SceneManager.LoadSceneAsync("terrainSmall",LoadSceneMode.Additive);
 	}
 
 	void Start(){
 		//openMenu();
-		init();
+		//init();
 	}
 
-	public void init () {
-		SpawnCars();
-		newRound();
-		audioManager.nextBGM();
-		
-
-	}
 
 	public void openMenu(){
 		SceneManager.LoadSceneAsync("menu",LoadSceneMode.Additive);
 		carAmount=4;
 		humanAmount=0;
-		init();
+		newRound();
 	}
 	
 	// Update is called once per frame
@@ -56,7 +49,7 @@ public class gameManager : MonoBehaviour {
 		if (Input.GetKeyDown("escape"))
             openMenu();
 
-
+		/* 
 		update++;
 		if (update>240){
 			update=0;
@@ -70,7 +63,7 @@ public class gameManager : MonoBehaviour {
 			//if (tileHistory.Count>200) Clear();
 			//Debug.ClearDeveloperConsole();
 			
-		}
+		}*/
 	}
 
 	void SpawnCars(){
@@ -92,12 +85,30 @@ public class gameManager : MonoBehaviour {
 		carManager.cars=cars;
 	}
 
-	public static void newRound(){
+	public static void newRound(bool singlePlayer = false){
 		trackManager.self.Clear();
+		if (roamManager.returnToRoaming){
+			roamManager.endRace();
+			return;
+		}
+		if (!singlePlayer){
+			self.SpawnCars();
+		}else{
+			self.carAmount = carManager.cars.Count;
+			for (int i = 0; i<self.carAmount;i++){
+				carController car = carManager.cars[i];
+				car.order=i;
+			}
+		}
+		
+
+		
+		//self.SpawnCars();
 		carManager.Reset();
 		UIManager.updateScoreDisplay();
 		if (self.gameType == gameTypes.MONSTERCULLING) monsterManager.newRound();
-
+		trackManager.self.init();
+		audioManager.nextBGM();
 	}
 
 	public static void Winner(carController car){

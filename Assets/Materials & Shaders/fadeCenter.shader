@@ -3,8 +3,8 @@
 Shader "Custom/fadingCenter" {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
-		_Glossiness ("Smoothness", Range(0,1)) = 0.5
-		_Metallic ("Metallic", Range(0,1)) = 0.0
+		_Glossiness ("Smoothness", Range(0,10)) = 0.5
+		_Metallic ("Metallic", Range(0,3)) = 0.0
 		_Distance ("Fade Distance", float) = 0.0
 		_FadeSpeed ("Fade Speed", float) = 0.0
 		_CentrePoint ("Centre", Vector) = (0, 0, 0, 0)

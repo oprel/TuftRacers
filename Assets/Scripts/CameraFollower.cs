@@ -27,6 +27,8 @@ public class CameraFollower : MonoBehaviour {
 	}
 
 	void Update () {
+		if (!target) target = carManager.cars[0].transform;
+		cam.nearClipPlane=.001f;
 		// Position the camera in the center.
 		Vector3 targetCameraPos = target.position + target.rotation * offset;
 		if (rb){

@@ -15,6 +15,10 @@ public class audioManager : MonoBehaviour {
 	void Awake(){
 		self = this;
 	}
+
+
+
+
 	void Update () {
 		if (!bgmSource.isPlaying){
 			bgmSource.clip = BGM[Random.Range(0,BGM.Length)];
@@ -32,6 +36,8 @@ public class audioManager : MonoBehaviour {
 	public static void nextBGM(){
 		self.bgmSource.Stop();
 	}
+
+	
 
 
 }
