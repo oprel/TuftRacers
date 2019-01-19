@@ -6,6 +6,7 @@ using UnityEngine;
 public class EditorTreePlacer : MonoBehaviour {
 	[Header("How many?")]
 	public int Amount;
+	public bool Regen;
 	
 	[Header("Settings")]
 	public float outerRadius;
@@ -21,6 +22,10 @@ public class EditorTreePlacer : MonoBehaviour {
 	public List<GameObject> allPlaced = new List<GameObject>();
 
 	void Update () {
+		if (Regen){
+			Regen = false;
+			Reset();
+		}
 		//batches
 		if (Amount-batchSize>allPlaced.Count){
 			for(int i =0;i<batchSize;i++){
@@ -42,6 +47,7 @@ public class EditorTreePlacer : MonoBehaviour {
 	}
 
 	public void PlaceObj(){
+
 		Vector3 pos;
 		do{
 			pos = Random.insideUnitSphere * outerRadius * transform.lossyScale.x;
@@ -67,6 +73,17 @@ public class EditorTreePlacer : MonoBehaviour {
         }
 		
 
+	}
+
+	public void Reset(){
+		foreach(GameObject obj in allPlaced){
+			DestroyImmediate(obj);
+		}
+		allPlaced.Clear();
+		for (int i = 0; i < Amount; i++)
+		{
+			PlaceObj();
+		}
 	}
 
 	void OnDrawGizmosSelected(){

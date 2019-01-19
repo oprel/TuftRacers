@@ -10,6 +10,7 @@ public class menuManager : MonoBehaviour {
 	public intSlider carSlider;
 	public intSlider humanSlider;
 	public intSlider diffSlider;
+
 	
 
 	// Use this for initialization
@@ -27,18 +28,27 @@ public class menuManager : MonoBehaviour {
 	}
 	
 	public void StartGame(){
-		gameManager = gameManager.self;
-		HUD = UIManager.self.HUD;
+		StartCoroutine(startingGame());
+	}
+
+	public IEnumerator startingGame(){
+		StartCoroutine(loadScene("main"));
+		do{
+			gameManager = gameManager.self;
+			yield return null;
+		}while(!gameManager);
+		
 		gameManager.carAmount = carSlider.i;
 		gameManager.humanAmount = humanSlider.i;
 		gameManager.aiGas = diffSlider.i/10f;
+		HUD = UIManager.self.HUD;
 		HUD.SetActive(true);
+		
 		SceneManager.UnloadSceneAsync("menu");
 		gameManager.newRound();
 	}
 
 	IEnumerator loadScene(string name){
-		
 		SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
 		Scene scene = SceneManager.GetSceneByName(name);
 		do{

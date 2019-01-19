@@ -30,6 +30,7 @@ public class AmbientManager : MonoBehaviour {
 	private void nextSong(AudioSource source){
 		if (source.volume<.01f || !source.isPlaying){
 			source.clip = ambientTracks[Random.Range(0,ambientTracks.Length)];
+			if(!source.clip) return;
 			source.time = Random.value * (source.clip.length-2*fadeTime);
 			source.Play();
 		}

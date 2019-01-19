@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 193822333628785310}
   - component: {fileID: 33934139629564962}
   - component: {fileID: 23272699103535184}
+  - component: {fileID: 64627157228147872}
   m_Layer: 0
   m_Name: Tree 2_3
   m_TagString: Untagged
@@ -83,6 +84,20 @@ MeshFilter:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1548110396065972}
+  m_Mesh: {fileID: 43851312683750024, guid: d5b3e14bff3e5f74f8504d0b6819f9a5, type: 2}
+--- !u!64 &64627157228147872
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1548110396065972}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
   m_Mesh: {fileID: 43851312683750024, guid: d5b3e14bff3e5f74f8504d0b6819f9a5, type: 2}
 --- !u!193 &193822333628785310
 Tree:
